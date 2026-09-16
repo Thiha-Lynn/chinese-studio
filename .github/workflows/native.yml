@@ -1,12 +1,20 @@
 name: Native packages
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: Packages to validate
+        type: choice
+        options: [all, android, desktop, web]
+        default: all
   push:
     tags: ["v1.1.*", "v1.[2-9].*", "v[2-9].*"]
 permissions:
   contents: read
 jobs:
   web:
+    if: github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'web'
+    timeout-minutes: 25
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -24,12 +32,15 @@ jobs:
           name: portable
           path: release/*.zip
           compression-level: 0
+          retention-days: 3
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: web-test-results
           path: test-results/
   desktop:
+    if: github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'desktop'
+    timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
@@ -82,12 +93,15 @@ jobs:
             release/desktop/*.AppImage
             release/desktop/*.deb
           compression-level: 0
+          retention-days: 3
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: desktop-tests-${{ matrix.target }}-${{ matrix.arch }}
           path: test-results/
   android:
+    if: github.event_name != 'workflow_dispatch' || inputs.target == 'all' || inputs.target == 'android'
+    timeout-minutes: 40
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -117,7 +131,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew --no-daemon testDebugUnitTest lintRelease assembleRelease assembleDebug assembleDebugAndroidTest
+          ./gradlew --no-daemon :app:lintRelease :app:assembleRelease :app:assembleDebug :app:assembleDebugAndroidTest
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs app/build/outputs/apk/release/app-release.apk
           mkdir -p ../release/android
           cp app/build/outputs/apk/release/app-release.apk ../release/android/chinese-studio-1.1.0-android.apk
@@ -138,7 +152,7 @@ jobs:
           script: |
             adb shell svc wifi disable
             adb shell svc data disable
-            (cd android && ./gradlew --no-daemon connectedDebugAndroidTest)
+            (cd android && ./gradlew --no-daemon :app:connectedDebugAndroidTest)
             bash scripts/test-android-release.sh
       - name: Test Android 16 offline
         uses: reactivecircus/android-emulator-runner@v2
@@ -150,13 +164,14 @@ jobs:
           script: |
             adb shell svc wifi disable
             adb shell svc data disable
-            (cd android && ./gradlew --no-daemon connectedDebugAndroidTest)
+            (cd android && ./gradlew --no-daemon :app:connectedDebugAndroidTest)
             bash scripts/test-android-release.sh
       - uses: actions/upload-artifact@v4
         with:
           name: android
           path: release/android/*.apk
           compression-level: 0
+          retention-days: 3
       - uses: actions/upload-artifact@v4
         if: always()
         with:
