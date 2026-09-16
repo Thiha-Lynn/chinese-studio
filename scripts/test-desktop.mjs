@@ -1,5 +1,5 @@
 import { _electron as electron, expect } from "@playwright/test";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 const os = process.platform,
@@ -17,6 +17,11 @@ const options = {
   env: { ...process.env, STUDIO_TEST_DATA: data },
 };
 let app;
+const watchdog = setTimeout(() => {
+  console.error("Native smoke test exceeded 120 seconds");
+  app?.process().kill("SIGKILL");
+  process.exit(1);
+}, 120000);
 try {
   app = await electron.launch(options);
   const page = await app.firstWindow();
@@ -54,37 +59,23 @@ try {
   await page.goto("studio://app/progress");
   // Electron downloads use its native DownloadItem, not Playwright's browser
   // download event. Pick a test path to avoid opening the OS save dialog.
-  await app.evaluate(({ app, session }) => {
+  const exportPath = path.join(data, "progress-export.json");
+  await app.evaluate(({ session }, exportPath) => {
     globalThis.__exportState = "waiting";
     session.defaultSession.once("will-download", (event, item) => {
-      item.setSavePath(
-        require("node:path").join(
-          app.getPath("userData"),
-          "progress-export.json",
-        ),
-      );
+      item.setSavePath(exportPath);
       item.once("done", (event, state) => {
         globalThis.__exportState = state;
       });
     });
-  });
+  }, exportPath);
   await page.getByRole("button", { name: "Export progress" }).click();
   await expect
     .poll(() => app.evaluate(() => globalThis.__exportState), {
       timeout: 20000,
     })
     .toBe("completed");
-  const exported = await app.evaluate(({ app }) =>
-    JSON.parse(
-      require("node:fs").readFileSync(
-        require("node:path").join(
-          app.getPath("userData"),
-          "progress-export.json",
-        ),
-        "utf8",
-      ),
-    ),
-  );
+  const exported = JSON.parse(await readFile(exportPath, "utf8"));
   expect(Object.values(exported.known)).toContain(true);
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
@@ -111,5 +102,6 @@ try {
   );
 } finally {
   if (app) await app.close();
+  clearTimeout(watchdog);
   await rm(data, { recursive: true, force: true });
 }
