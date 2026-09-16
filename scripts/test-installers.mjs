@@ -29,6 +29,11 @@ try {
   if (process.platform === "win32") {
     const destination = path.join(work, "installed");
     run(artifact(".exe"), ["/S", `/D=${destination}`]);
+    console.log("Installed files:", await readdir(destination));
+    console.log(
+      "Installed executable bytes:",
+      (await stat(path.join(destination, "Chinese Studio.exe"))).size,
+    );
     test(path.join(destination, "Chinese Studio.exe"));
   } else if (process.platform === "darwin") {
     const mount = path.join(work, "mounted");
