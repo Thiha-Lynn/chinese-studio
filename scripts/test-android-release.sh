@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-adb uninstall live.ztvmm.chinese
+if adb shell pm path live.ztvmm.chinese | grep -q "^package:"; then
+  adb uninstall live.ztvmm.chinese
+fi
 adb install android/app/build/outputs/apk/release/app-release.apk
 adb shell svc wifi disable
 adb shell svc data disable
