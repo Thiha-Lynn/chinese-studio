@@ -221,7 +221,7 @@ export default function Offline() {
             ))}
           </ul>
           <small>
-            Windows 10+ (ARM: 11), macOS 13+, Ubuntu 24.04, Android 9+ with an
+            Windows 10+ (ARM: 11), macOS 13+, Ubuntu 24.04, Android 7+ with an
             updated WebView. Windows and Mac packages are unsigned. iPhone and
             iPad use Add to Home Screen.
           </small>

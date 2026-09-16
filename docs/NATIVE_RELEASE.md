@@ -8,7 +8,7 @@ Chinese Studio 1.1.0 packages the same public study interface with all ten Chine
 | Intel Mac                  | `mac-x64.dmg`                                             | macOS 13 or later                                                       |
 | Linux PC                   | `linux-x64.AppImage` or `.deb`                            | Ubuntu 24.04, x64; other distributions need compatible system libraries |
 | Linux ARM                  | `linux-arm64.AppImage` or `.deb`                          | Ubuntu 24.04, ARM64                                                     |
-| Android phone/tablet       | `android.apk`                                             | Android 9+, with Android System WebView/Chrome 107+                     |
+| Android phone/tablet       | `android.apk`                                             | Android 7+, with Android System WebView/Chrome 107+                     |
 | iPhone/iPad                | [Install the web app](https://chinese.ztvmm.live/offline) | Safari 16+; Share → Add to Home Screen, then download lessons           |
 | Other desktop environments | `portable.zip`                                            | A compatible browser and Node.js 24–26                                  |
 
