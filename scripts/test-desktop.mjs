@@ -12,7 +12,7 @@ const executablePath =
       : `release/desktop/linux${arch === "arm64" ? "-arm64" : ""}-unpacked/chinese-studio-desktop`;
 const data = await mkdtemp(path.join(tmpdir(), "chinese-native-test-"));
 const options = {
-  executablePath: path.resolve(executablePath),
+  executablePath: process.env.STUDIO_EXECUTABLE || path.resolve(executablePath),
   args: os === "linux" ? ["--no-sandbox"] : [],
   env: { ...process.env, STUDIO_TEST_DATA: data },
 };
