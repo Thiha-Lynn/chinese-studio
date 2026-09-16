@@ -22,7 +22,7 @@ const artifact = (extension) =>
 function test(executable) {
   console.log("Testing installed executable:", executable);
   run(process.execPath, ["scripts/test-desktop.mjs"], {
-    env: { ...process.env, STUDIO_EXECUTABLE: executable },
+    env: { ...process.env, STUDIO_EXECUTABLE: executable, DEBUG: "pw:browser" },
   });
 }
 try {
