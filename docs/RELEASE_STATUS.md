@@ -23,3 +23,13 @@ Browser engine/mobile emulation is not physical-device certification. Real-devic
 - Chinese 1 awaits the authorized account/export previously requested.
 - MDL story audio, video and official assessment banks are partial, not a complete portal clone. The source coverage screen records this. Some source downloads remain on the official portal.
 - Original MFU resources are distributed on the project owner's permission confirmation and retain their original rights. They are not covered by the application’s MIT license.
+
+## Native release validation
+
+Pre-release validation passed for the installable packages:
+
+- [Desktop installer run](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35061911191): Windows x64/ARM64 EXE installation; Intel/Apple Silicon Mac DMG installation; Linux x64/ARM64 Debian and AppImage payloads. Each installed app loaded all 529 offline resources, opened handwriting, exported progress, fit a narrow window and retained learned words after restarting.
+- [Android run](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35061417083): lint, release signing verification, all 551 bundled web files checked by SHA-256, offline lesson/handwriting and progress instrumentation, rotation, and signed APK installation/launch on Android 15 and 16 emulators with Wi-Fi and mobile data disabled.
+- [Web verification](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35061912682): Windows/macOS/Linux build matrix and the twelve browser checks.
+
+The v1.1.0 tag repeats these required gates before publishing. Hardware microphone/voice availability and older supported operating-system versions have not been physically certified. Windows/macOS publisher signatures and Apple iOS provisioning remain outside this release.

@@ -19,3 +19,5 @@ Run `Native packages` manually to validate without publishing. Version tags from
 See [release compatibility](NATIVE_RELEASE.md) for targets and exclusions. Current test results and screenshots are retained as GitHub Actions artifacts. Windows and macOS tests use matching x64/ARM64 runners; Linux tests use Ubuntu 24.04 on each architecture. Android instrumentation tests launch with Wi-Fi and mobile data disabled on API 35 and 36, check bundled lesson and handwriting files, change orientation and verify persisted progress after restarting the activity. Browser tests separately exercise Chromium, Firefox and WebKit, including offline packs and import/export.
 
 The web app remains the iPhone/iPad distribution. Creating an IPA requires a separate Apple Developer signing/provisioning setup; no simulator archive is presented as an installable iPhone release.
+
+Official Android release certificate SHA-256: `f31d3ad5f155ba8a7c76177bab1be58455a4e075ef51a13bef70c9e5fa7f975a`. This public fingerprint identifies the signing certificate; private signing material is never published.
