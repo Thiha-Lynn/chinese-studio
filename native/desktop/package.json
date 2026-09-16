@@ -56,7 +56,7 @@
       "target": [
         "nsis"
       ],
-      "signAndEditExecutable": false,
+      "signAndEditExecutable": true,
       "icon": "../../public/icon-512.png"
     },
     "nsis": {
