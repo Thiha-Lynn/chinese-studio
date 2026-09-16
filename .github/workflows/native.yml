@@ -204,6 +204,13 @@ jobs:
         run: |
           find release -type f ! -name '*.exe' ! -name '*.dmg' ! -name '*.AppImage' ! -name '*.deb' ! -name '*.apk' ! -name '*.zip' -delete
           cd release
+          # Electron Builder uses distro-specific aliases for Linux x64.
+          for file in *-linux-x86_64.AppImage; do
+            [ ! -f "$file" ] || mv "$file" "${file/-linux-x86_64./-linux-x64.}"
+          done
+          for file in *-linux-amd64.deb; do
+            [ ! -f "$file" ] || mv "$file" "${file/-linux-amd64./-linux-x64.}"
+          done
           sha256sum *.exe *.dmg *.AppImage *.deb *.apk *.zip > SHA256SUMS
           cd ..
           gh release create "$GITHUB_REF_NAME" release/*.exe release/*.dmg release/*.AppImage release/*.deb release/*.apk release/*.zip release/SHA256SUMS --title "Chinese Studio $GITHUB_REF_NAME" --notes-file docs/NATIVE_RELEASE.md
