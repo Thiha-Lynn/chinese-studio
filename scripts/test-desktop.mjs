@@ -20,6 +20,7 @@ let app;
 try {
   app = await electron.launch(options);
   const page = await app.firstWindow();
+  page.setDefaultTimeout(20000);
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await expect(page.locator(".world-card")).toHaveCount(10);
@@ -51,11 +52,40 @@ try {
     .first()
     .click();
   await page.goto("studio://app/progress");
-  const download = page.waitForEvent("download");
+  // Electron downloads use its native DownloadItem, not Playwright's browser
+  // download event. Pick a test path to avoid opening the OS save dialog.
+  await app.evaluate(({ app, session }) => {
+    globalThis.__exportState = "waiting";
+    session.defaultSession.once("will-download", (event, item) => {
+      item.setSavePath(
+        require("node:path").join(
+          app.getPath("userData"),
+          "progress-export.json",
+        ),
+      );
+      item.once("done", (event, state) => {
+        globalThis.__exportState = state;
+      });
+    });
+  });
   await page.getByRole("button", { name: "Export progress" }).click();
-  expect((await download).suggestedFilename()).toBe(
-    "chinese-studio-progress.json",
+  await expect
+    .poll(() => app.evaluate(() => globalThis.__exportState), {
+      timeout: 20000,
+    })
+    .toBe("completed");
+  const exported = await app.evaluate(({ app }) =>
+    JSON.parse(
+      require("node:fs").readFileSync(
+        require("node:path").join(
+          app.getPath("userData"),
+          "progress-export.json",
+        ),
+        "utf8",
+      ),
+    ),
   );
+  expect(Object.values(exported.known)).toContain(true);
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(

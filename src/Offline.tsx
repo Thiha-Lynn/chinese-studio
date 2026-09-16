@@ -152,8 +152,17 @@ export default function Offline() {
           </small>
         </section>
         <section className="panel">
-          <h2>Install Chinese Studio</h2>
-          {install ? (
+          <h2>
+            {bundledApp
+              ? "Updates and other devices"
+              : "Install Chinese Studio"}
+          </h2>
+          {bundledApp ? (
+            <p>
+              This installation already includes the complete available lesson
+              pack. Download a newer release here when you want to update.
+            </p>
+          ) : install ? (
             <button
               className="btn"
               onClick={async () => {
@@ -186,6 +195,36 @@ export default function Offline() {
             need a connection. Speech playback depends on a Mandarin voice
             installed on your device.
           </p>
+          <h3>Download an app</h3>
+          <ul className="app-downloads">
+            {[
+              ["Windows · Intel / AMD", "win-x64.exe"],
+              ["Windows · ARM", "win-arm64.exe"],
+              ["Mac · Apple Silicon", "mac-arm64.dmg"],
+              ["Mac · Intel", "mac-x64.dmg"],
+              ["Linux · Intel / AMD", "linux-x64.AppImage"],
+              ["Linux · ARM", "linux-arm64.AppImage"],
+              ["Android · phone or tablet", "android.apk"],
+            ].map(([label, file]) => (
+              <li key={file}>
+                <a
+                  href={
+                    "https://github.com/Thiha-Lynn/chinese-studio/releases/download/v1.1.0/chinese-studio-1.1.0-" +
+                    file
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {label} ↗
+                </a>
+              </li>
+            ))}
+          </ul>
+          <small>
+            Windows 10+ (ARM: 11), macOS 13+, Ubuntu 24.04, Android 9+ with an
+            updated WebView. Windows and Mac packages are unsigned. iPhone and
+            iPad use Add to Home Screen.
+          </small>
           <a
             href="https://github.com/Thiha-Lynn/chinese-studio/releases"
             target="_blank"
