@@ -22,14 +22,15 @@ public class OfflineStudyTest {
     }
     private void waitFor(ActivityScenario<MainActivity> scenario, String predicate) throws Exception {
         for (int n = 0; n < 120; n++) { if ("true".equals(js(scenario, predicate))) return; Thread.sleep(500); }
-        fail("Timed out: " + predicate + "; page: " + js(scenario, "document.body.innerText.slice(0,1200)"));
+        fail("Timed out: " + predicate + "; diagnostic: " + js(scenario, "String(window.__check)") + "; page: " + js(scenario, "document.body.innerText.slice(0,1200)"));
     }
     @Test public void bundledLessonsWorkOfflineAndPersist() throws Exception {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             waitFor(scenario, "document.querySelectorAll('.world-card').length === 10");
             assertEquals("true", js(scenario, "document.documentElement.scrollWidth <= innerWidth"));
-            js(scenario, "window.__check='pending'; Promise.all([fetch('/course.json').then(r=>r.json()),fetch('/library/glyphs/我.json').then(r=>r.json()),fetch('/library/resources/Lesson%201.pdf').then(r=>r.arrayBuffer())]).then(([c,g,p])=>window.__check=(c.lessons.length===10 && c.vocab.length===249 && g.strokes.length>0 && p.byteLength>1000)?'ok':'bad').catch(e=>window.__check=String(e));");
-            waitFor(scenario, "window.__check === 'ok'");
+            js(scenario, "window.__check='pending'; Promise.all([fetch('/course.json').then(r=>r.json()),fetch('/course.json').then(r=>r.json()).then(c=>fetch('/library/glyphs/'+encodeURIComponent([...c.vocab[0].hanzi][0])+'.json')).then(r=>r.json()),fetch('/library/resources/Lesson%201.pdf').then(r=>r.arrayBuffer())]).then(([c,g,p])=>window.__check=(c.lessons.length===10 && c.vocab.length===249 && g.strokes.length>0 && p.byteLength>1000 && new TextDecoder().decode(p.slice(0,5))==='%PDF-')?'ok':'bad').catch(e=>window.__check=String(e));");
+            waitFor(scenario, "window.__check !== 'pending'");
+            assertEquals("Offline assets: " + js(scenario, "window.__check"), "\"ok\"", js(scenario, "window.__check"));
             js(scenario, "document.querySelectorAll('.world-card')[9].click()");
             waitFor(scenario, "document.body.innerText.includes('Flying to Thailand')");
             js(scenario, "Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Lesson notes').click()");
