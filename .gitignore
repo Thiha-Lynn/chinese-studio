@@ -1,0 +1,15 @@
+node_modules/
+build/
+.env*
+!.env.example
+var/
+coverage/
+*.tsbuildinfo
+*.log
+.openai/
+.sites-runtime/
+dist/
+release/
+test-results/
+playwright-report/
+.DS_Store
