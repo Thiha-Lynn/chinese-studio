@@ -11,6 +11,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 const root = path.resolve("build/client");
 cpSync("content/course.json", path.join(root, "course.json"));
+cpSync("native/ANDROID_NOTICES.txt", path.join(root, "NATIVE_SOFTWARE_NOTICES.txt"));
 cpSync("library", path.join(root, "library"), { recursive: true });
 const course = JSON.parse(readFileSync("content/course.json", "utf8"));
 const characters = new Set(

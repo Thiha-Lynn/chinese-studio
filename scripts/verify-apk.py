@@ -4,7 +4,8 @@ import json
 from pathlib import Path
 from zipfile import ZipFile
 root = Path('build/client')
-with ZipFile('android/app/build/outputs/apk/release/app-release.apk') as apk:
+# Android ZIP writers may omit the UTF-8 flag on non-ASCII asset names.
+with ZipFile('android/app/build/outputs/apk/release/app-release.apk', metadata_encoding='utf-8') as apk:
     count = 0
     for source in root.rglob('*'):
         if source.is_file():

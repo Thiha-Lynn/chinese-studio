@@ -15,3 +15,5 @@ The root MIT license applies to Chinese Studio application code, original docume
 Original course portals: [MFU MDL](https://mdl.mfu.ac.th/) and MFU Google Classroom. This is an independent study companion, not an official replacement, gradebook, answer key, or institutional endorsement.
 
 Do not contribute course exports, images, audio, student information, or assessments unless you have permission to publish them. Report attribution or permission concerns through a repository issue without attaching private material; maintainers can remove disputed resources while resolving scope.
+
+Native distributions additionally use Electron/Chromium (desktop), Capacitor and AndroidX/Cordova/Kotlin (Android). Electron's runtime license files must remain with desktop distributions. Capacitor MIT and Android dependency Apache 2.0 notices are bundled as `NATIVE_SOFTWARE_NOTICES.txt`; web-library notices are in `THIRD_PARTY_SOFTWARE_LICENSES.txt`. These notices do not change the course-resource licensing above.
