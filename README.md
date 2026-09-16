@@ -48,3 +48,7 @@ CI checks build/content on macOS, Windows and Linux. Tagging a version runs the 
 ## License and attribution
 
 Application code and original contributions: **MIT**. Original MFU course content/artwork and Make Me a Hanzi stroke data retain separate rights; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Inclusion in this repository does not grant MIT rights to third-party resources.
+
+## Desktop and Android apps
+
+The [release downloads](https://github.com/Thiha-Lynn/chinese-studio/releases) include native Windows installers, macOS disk images, Linux AppImage/Debian packages and a release-signed Android APK from v1.1.0 onward. All included lessons ship inside each app. See [supported platforms and installation notes](docs/NATIVE_RELEASE.md) and [native build instructions](docs/NATIVE_BUILDS.md). iPhone/iPad use the installable web app. Windows/macOS publisher signing and an iOS IPA are not included.

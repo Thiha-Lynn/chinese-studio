@@ -1,0 +1,7 @@
+{
+  "appId": "live.ztvmm.chinese",
+  "appName": "Chinese Studio",
+  "webDir": "build/client",
+  "android": {"allowMixedContent": false, "webContentsDebuggingEnabled": false},
+  "server": {"androidScheme": "https"}
+}

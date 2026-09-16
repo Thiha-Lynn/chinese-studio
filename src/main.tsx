@@ -43,6 +43,14 @@ import Practice from "./Practice";
 import Oral from "./Oral";
 import "./style.css";
 import Offline from "./Offline";
+import {
+  bundledApp,
+  mobileApp,
+  openMobileResource,
+  saveFile,
+  installMobileDownloads,
+} from "./native";
+installMobileDownloads();
 import { parseProgress } from "./progress";
 const Glyphs = lazy(() => import("./Glyphs"));
 function navigate(url: string) {
@@ -160,7 +168,7 @@ function App() {
       .catch(() =>
         setSession({ user: null, authReady: false, aiReady: false }),
       );
-    if ("serviceWorker" in navigator && import.meta.env.PROD)
+    if (!bundledApp && "serviceWorker" in navigator && import.meta.env.PROD)
       navigator.serviceWorker
         .register("/sw.js")
         .catch(() =>
@@ -191,7 +199,13 @@ function App() {
   }, [url, lesson]);
   const openResource = (s: string) => {
     if (!s.startsWith("/library/")) return;
-    if (/\.(pdf|png|webp)$/i.test(s)) setViewer(s);
+    if (mobileApp && /\.(pdf|pptx|docx)$/i.test(s)) {
+      void openMobileResource(s).catch(() =>
+        setError(
+          "Could not open this document. Install a PDF or Office reader on your device.",
+        ),
+      );
+    } else if (/\.(pdf|png|webp)$/i.test(s)) setViewer(s);
     else window.open(s, "_blank", "noopener");
   };
   if (!course)
@@ -1518,17 +1532,19 @@ function ProgressView({
 }) {
   const [message, setMessage] = useState(""),
     [confirmDelete, setConfirmDelete] = useState(false);
-  function download() {
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(progress, null, 2)], {
-        type: "application/json",
-      }),
-    );
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "chinese-studio-progress.json";
-    a.click();
-    URL.revokeObjectURL(url);
+  async function download() {
+    try {
+      await saveFile(
+        new Blob([JSON.stringify(progress, null, 2)], {
+          type: "application/json",
+        }),
+        "chinese-studio-progress.json",
+      );
+    } catch {
+      setMessage(
+        "Export was cancelled or unavailable. Your progress is still saved on this device.",
+      );
+    }
   }
   async function restore(file?: File) {
     if (!file) return;

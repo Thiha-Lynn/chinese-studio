@@ -1,7 +1,7 @@
 name: Release portable app
 on:
   push:
-    tags: ['v*']
+    tags: ['v1.0.*']
 permissions:
   contents: write
 jobs:

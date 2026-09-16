@@ -35,6 +35,9 @@ const notices = [
   "lucide-react",
   "hanzi-writer",
   "zod",
+  "@capacitor/core",
+  "@capacitor/filesystem",
+  "@capacitor/share",
 ]
   .map((pkg) => {
     const dir = path.join("node_modules", pkg);

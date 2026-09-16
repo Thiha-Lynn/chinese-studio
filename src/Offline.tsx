@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { bundledApp } from "./native";
 type Pack = {
   version: string;
   core: string[];
@@ -29,7 +30,7 @@ export default function Offline() {
     return () => window.removeEventListener("beforeinstallprompt", f);
   }, []);
   useEffect(() => {
-    if (!pack || !("caches" in window)) return;
+    if (bundledApp || !pack || !("caches" in window)) return;
     caches.open("chinese-pack-" + pack.version).then(async (c) => {
       const keys = await c.keys();
       setInstalled(
@@ -99,7 +100,9 @@ export default function Offline() {
       </div>
       <div className="offline-grid">
         <section className="panel">
-          <h2>Save for offline study</h2>
+          <h2>
+            {bundledApp ? "Ready for offline study" : "Save for offline study"}
+          </h2>
           <p>
             Save all ten lessons, vocabulary artwork, stroke guides and
             downloadable course files on this device.
@@ -109,17 +112,19 @@ export default function Offline() {
               ? `${Math.ceil(pack.files.reduce((n, f) => n + f.bytes, 0) / 1e6)} MB · ${pack.files.length} files`
               : "Checking download size…"}
           </p>
-          <button
-            className="btn"
-            disabled={busy || !pack || !("serviceWorker" in navigator)}
-            onClick={download}
-          >
-            {busy
-              ? "Downloading…"
-              : installed
-                ? "Check saved materials"
-                : "Download all lessons"}
-          </button>
+          {!bundledApp && (
+            <button
+              className="btn"
+              disabled={busy || !pack || !("serviceWorker" in navigator)}
+              onClick={download}
+            >
+              {busy
+                ? "Downloading…"
+                : installed
+                  ? "Check saved materials"
+                  : "Download all lessons"}
+            </button>
+          )}
           {busy && (
             <progress
               aria-label="Offline download progress"
@@ -128,10 +133,12 @@ export default function Offline() {
             />
           )}
           <p role="status">
-            {status ||
-              (installed
-                ? "All resources are saved on this device."
-                : "The app and lesson text save automatically after your first online visit.")}{" "}
+            {bundledApp
+              ? "All lessons, vocabulary, stroke guides and course documents are included with this app. No download is needed."
+              : status ||
+                (installed
+                  ? "All resources are saved on this device."
+                  : "The app and lesson text save automatically after your first online visit.")}{" "}
           </p>
           {installed && (
             <button className="text-button" onClick={remove}>
@@ -174,8 +181,9 @@ export default function Offline() {
           </p>
           <h3>Needs a connection</h3>
           <p>
-            Google sign-in, account backups, the DeepSeek tutor and links to the
-            official portal. Speech playback depends on a Mandarin voice
+            Google sign-in, account backups and the DeepSeek tutor are available
+            on the live website when configured. Links to the official portal
+            need a connection. Speech playback depends on a Mandarin voice
             installed on your device.
           </p>
           <a
@@ -183,7 +191,7 @@ export default function Offline() {
             target="_blank"
             rel="noreferrer"
           >
-            Download a portable desktop release ↗
+            Download Windows, Mac, Linux and Android apps ↗
           </a>
         </section>
       </div>

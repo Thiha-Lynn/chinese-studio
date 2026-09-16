@@ -1,0 +1,77 @@
+{
+  "name": "chinese-studio-desktop",
+  "version": "1.1.0",
+  "description": "Chinese Studio \u2014 offline lessons and practice",
+  "author": "Thiha-Lynn and contributors <156650865+Thiha-Lynn@users.noreply.github.com>",
+  "homepage": "https://chinese.ztvmm.live",
+  "license": "MIT",
+  "main": "main.cjs",
+  "private": true,
+  "scripts": {
+    "pack": "electron-builder --publish never"
+  },
+  "devDependencies": {
+    "electron": "44.4.1",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "live.ztvmm.chinese",
+    "productName": "Chinese Studio",
+    "artifactName": "chinese-studio-${version}-${os}-${arch}.${ext}",
+    "directories": {
+      "output": "../../release/desktop"
+    },
+    "files": [
+      "main.cjs",
+      "paths.cjs",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../../build/client",
+        "to": "web"
+      },
+      {
+        "from": "../../LICENSE",
+        "to": "LICENSE"
+      },
+      {
+        "from": "../../THIRD_PARTY_NOTICES.md",
+        "to": "THIRD_PARTY_NOTICES.md"
+      }
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.education",
+      "minimumSystemVersion": "13.0",
+      "identity": null,
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "Record pronunciation practice locally on your device."
+      },
+      "icon": "../../public/icon-512.png"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "signAndEditExecutable": false,
+      "icon": "../../public/icon-512.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Education",
+      "icon": "../../public/icon-512.png"
+    }
+  }
+}

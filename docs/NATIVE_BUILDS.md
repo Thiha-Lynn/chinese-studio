@@ -1,0 +1,21 @@
+# Native builds
+
+The web, desktop, Android and portable releases share `build/client`. Native apps skip the web service worker because their complete library is already bundled. Electron uses a secure, standard `studio://app` origin with a sandboxed renderer, no Node access or renderer bridge, constrained asset resolution and external links sent to the system browser. Its stable origin retains device progress across updates. Capacitor serves bundled Android assets on its local HTTPS origin. Android bridges provide local file sharing and device text-to-speech; they never load a remote application into the privileged WebView.
+
+## Build from source
+
+Use Node 24–26. Run `npm ci`, `npm test`, and `npm run build` first.
+
+Desktop: `npm ci --prefix native/desktop`, then `npm run pack --prefix native/desktop -- --win --x64` (or `--mac --arm64`, `--linux --x64`, and the corresponding supported architecture). Build on the matching operating system and architecture. Results are under `release/desktop`. `node scripts/test-desktop.mjs` launches the packaged app. Linux tests need a display, e.g. `xvfb-run -a node scripts/test-desktop.mjs`. The CI test launcher uses `--no-sandbox` only in the isolated Linux test runner; shipped app launchers do not disable their sandbox. AppImage may require the distribution's FUSE package; use the Debian package where AppImage integration is unavailable.
+
+Android: install JDK 21 and the Android SDK, then `npx cap sync android`. From `android`, run `./gradlew assembleDebug` for development. For a release, supply `ANDROID_KEYSTORE_PATH` and `ANDROID_KEYSTORE_PASSWORD`, using alias `chinese-studio`, and run `./gradlew lintRelease assembleRelease`. Never commit a keystore or passwords. A different signing key cannot update an existing installation. Keep an encrypted backup of your release key. Minimum SDK is 28; compile/target SDK is 36. The Android WebView must support Chrome 107-era JavaScript features. No camera or broad storage permission is requested.
+
+GitHub secrets `ANDROID_KEYSTORE_BASE64` and `ANDROID_KEYSTORE_PASSWORD` supply the official release key. The local owner backup lives outside the repository. Signing material must not appear in artifacts, logs or issue reports. The release workflow runs debug instrumentation tests against identical source/assets, checks release lint and validates the signed release APK. Desktop artifacts are tested directly after packaging. Windows/macOS publisher certificates and Apple notarization are not configured.
+
+Run `Native packages` manually to validate without publishing. Version tags from v1.1.0 invoke the same workflow and publish only after every required job succeeds. Update the version in root/desktop package files, Android `versionName`/`versionCode`, release notes and APK artifact filename together. Download checksums are generated after all packages are collected. Do not upload debug APKs as release downloads.
+
+## Compatibility evidence
+
+See [release compatibility](NATIVE_RELEASE.md) for targets and exclusions. Current test results and screenshots are retained as GitHub Actions artifacts. Windows and macOS tests use matching x64/ARM64 runners; Linux tests use Ubuntu 24.04 on each architecture. Android instrumentation tests launch with Wi-Fi and mobile data disabled on API 35 and 36, check bundled lesson and handwriting files, change orientation and verify persisted progress after restarting the activity. Browser tests separately exercise Chromium, Firefox and WebKit, including offline packs and import/export.
+
+The web app remains the iPhone/iPad distribution. Creating an IPA requires a separate Apple Developer signing/provisioning setup; no simulator archive is presented as an installable iPhone release.

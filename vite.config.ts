@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
+    target: ["chrome107", "safari16"],
     outDir: "build/client",
     emptyOutDir: true,
     chunkSizeWarningLimit: 500,

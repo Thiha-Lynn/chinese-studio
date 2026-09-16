@@ -1,8 +1,21 @@
+import { bundledApp, mobileApp, speakMobile } from "./native";
 import type { Progress } from "./types";
 export async function api<T = any>(
   url: string,
   options: RequestInit = {},
 ): Promise<T> {
+  if (bundledApp) {
+    if (url === "/api/session")
+      return {
+        user: null,
+        authReady: false,
+        aiReady: false,
+        mode: "bundled",
+      } as T;
+    throw new Error(
+      "Use the live website for account backups and the online tutor.",
+    );
+  }
   const r = await fetch(url, {
     ...options,
     headers: { "Content-Type": "application/json", ...options.headers },
@@ -54,6 +67,14 @@ export function review(p: Progress, id: string, good: boolean): Progress {
   );
 }
 export function speak(text: string, onError?: (t: string) => void) {
+  if (mobileApp) {
+    void speakMobile(text).catch(() =>
+      onError?.(
+        "Install a Mandarin voice in your device text-to-speech settings, then retry.",
+      ),
+    );
+    return;
+  }
   if (!("speechSynthesis" in window)) {
     onError?.("Speech playback is not available in this browser.");
     return;
