@@ -8,7 +8,7 @@
   "main": "main.cjs",
   "private": true,
   "scripts": {
-    "pack": "electron-builder --publish never"
+    "pack": "node build.cjs"
   },
   "devDependencies": {
     "electron": "44.4.1",
