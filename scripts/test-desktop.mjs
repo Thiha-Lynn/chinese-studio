@@ -77,7 +77,10 @@ try {
     .toBe("completed");
   const exported = JSON.parse(await readFile(exportPath, "utf8"));
   expect(Object.values(exported.known)).toContain(true);
-  await page.setViewportSize({ width: 390, height: 844 });
+  const nativeWindow = await app.browserWindow(page);
+  await nativeWindow.evaluate((win) => win.setContentSize(390, 844));
+  await expect.poll(() => page.evaluate(() => innerWidth)).toBe(390);
+  await page.evaluate(() => window.scrollTo(0, 0));
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -85,7 +88,7 @@ try {
   ).toBe(true);
   await page.screenshot({
     path: `test-results/native-${os}-${arch}.png`,
-    fullPage: true,
+    fullPage: false,
   });
   expect(errors).toEqual([]);
   await app.close();

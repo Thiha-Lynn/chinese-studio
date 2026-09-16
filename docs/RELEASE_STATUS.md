@@ -1,4 +1,4 @@
-# Release status · 1.0.0
+# Release status · 1.1.0
 
 ## Included
 
@@ -14,7 +14,7 @@ Live host: https://chinese.ztvmm.live (dedicated service on the existing AWS hos
 - Offline pack: origin server is stopped after download, then lessons are reloaded, lazy handwriting opens and PDF range reads succeed. Chromium/Firefox also use simulated network disconnection. WebKit's simulated-offline mode rejects service-worker requests in this runner; stopping the origin verifies an actual unreachable server without relying on that emulation.
 - OS build matrix passed in GitHub Actions for macOS, Windows and Linux on the release source. The portable release workflow completed and attached the ZIP and SHA-256 checksum.
 
-Browser engine/mobile emulation is not physical-device certification. Real-device installation, microphone and device Mandarin voices still need acceptance checks on the intended macOS, Windows, Linux, Android and iOS devices. Native App Store / Play Store / DMG / MSI distributions are not included; this is a web/PWA plus portable localhost release requiring Node.js 24+.
+Browser engine/mobile emulation is not physical-device certification. Real-device installation, microphone and device Mandarin voices still need acceptance checks on the intended macOS, Windows, Linux, Android and iOS devices. Version 1.1.0 adds Windows EXE, macOS DMG, Linux AppImage/Debian and Android APK packages with the complete available library bundled. Desktop packages cover x64 and ARM64; Android uses the device WebView. See [native compatibility and signing notes](NATIVE_RELEASE.md). App Store / Play Store listings and an iOS IPA are not included. Only the separate portable ZIP requires Node.js 24+.
 
 ## Remaining dependencies and scope
 
