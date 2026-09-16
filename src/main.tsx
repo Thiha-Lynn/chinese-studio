@@ -668,11 +668,24 @@ function AccountBackup({
     <section className="panel">
       <h2>Account backup</h2>
       <p>
-        Device progress stays on this browser. Save a copy to your account, then
-        load it on another device. Loading a backup replaces the current
-        device’s progress; export first to keep both.
+        Progress stays on this device. Save a copy to your account, then load it
+        on another device. Loading a backup replaces the current device’s
+        progress; export first to keep both.
       </p>
-      {session?.user ? (
+      {bundledApp ? (
+        <p>
+          Use Export progress and Restore backup to move your learning between
+          apps. Optional account backups are available on the{" "}
+          <a
+            href="https://chinese.ztvmm.live/progress"
+            target="_blank"
+            rel="noreferrer"
+          >
+            live website
+          </a>{" "}
+          when sign-in is configured.
+        </p>
+      ) : session?.user ? (
         <>
           <p>Signed in as {session.user.email}</p>
           <div className="row">

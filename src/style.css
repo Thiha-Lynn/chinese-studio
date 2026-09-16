@@ -1899,7 +1899,7 @@ progress {
     padding: 25px 18px;
   }
   .topbar .breadcrumb-label {
-    max-width: 128px;
+    max-width: 190px;
     white-space: nowrap;
     overflow: hidden;
   }
