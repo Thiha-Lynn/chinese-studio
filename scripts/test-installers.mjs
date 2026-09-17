@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { mkdtemp, readdir, rm, stat } from "node:fs/promises";
+import { mkdtemp, readdir, rm, stat, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 const output = path.resolve("release/desktop");
@@ -13,7 +13,14 @@ function run(command, args, options = {}) {
   if (result.error || result.status !== 0)
     throw result.error || Error(`${command} exited ${result.status}`);
 }
-const files = await readdir(output);
+const { version } = JSON.parse(await readFile("package.json", "utf8"));
+const architectures =
+  process.arch === "x64" ? ["x64", "x86_64", "amd64"] : [process.arch];
+const files = (await readdir(output)).filter(
+  (name) =>
+    name.includes(`-${version}-`) &&
+    architectures.some((arch) => name.includes(`-${arch}.`)),
+);
 const artifact = (extension) =>
   path.join(
     output,

@@ -1,8 +1,8 @@
-# ESC Chinese 1.2.0
+# ESC Chinese 1.2.1
 
 ESC school branding, consistent navigation and controls, a school information page, accessible lesson selectors, improved phone layouts and a complete platform download center. Offline installation handles early browser prompts and unavailable storage; speech failures are explained instead of silently ignored. All original course content and rights notices remain in place.
 
-ESC Chinese 1.2.0 packages the same public study interface with all ten Chinese 2 lessons, 249 vocabulary entries, lesson text, handwriting guides and the available course documents. Installed desktop and Android packages work on the first launch without an internet connection. No Node.js installation or account is needed for these native packages.
+ESC Chinese 1.2.1 packages the same public study interface with all ten Chinese 2 lessons, 249 vocabulary entries, lesson text, handwriting guides and the available course documents. Installed desktop and Android packages work on the first launch without an internet connection. No Node.js installation or account is needed for these native packages.
 
 | Device                     | Download                                                  | Compatibility target                                                    |
 | -------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
@@ -22,10 +22,10 @@ Windows and macOS downloads are not publisher-signed/notarized; their operating 
 
 Native apps store their own progress locally. Export/import transfers progress between installations. Account backup and AI services belong to the live website and require online configuration. Updating the app preserves its storage; uninstalling or clearing app data may erase it. Export before changing installations. Native app updates are downloaded manually from this release page; there is no silent updater.
 
-The release workflow gates publication on web tests, packaged desktop smoke tests on each listed processor architecture, Android lint/build/signature verification, and offline Android 15/16 emulator tests. Tests cover lesson navigation, bundled resources, handwriting data, responsive layout, exports on desktop, and progress persistence. Emulator/runner coverage is not physical-device certification. See the repository’s Native packages workflow for the exact 1.2.0 commit and results. Earlier 1.1.0 evidence is historical and does not certify this release.
+The release workflow gates publication on web tests, packaged desktop smoke tests on each listed processor architecture, Android lint/build/signature verification, and offline Android 15/16 emulator tests. Tests cover lesson navigation, bundled resources, handwriting data, responsive layout, exports on desktop, and progress persistence. Emulator/runner coverage is not physical-device certification. See the repository’s Native packages workflow for the exact 1.2.1 commit and results. Earlier 1.1.0 evidence is historical and does not certify this release.
 
 Every download has a SHA-256 entry in `SHA256SUMS`. Code is MIT; the existing course-content and stroke-data notices remain in effect. Source, contribution instructions, and build documentation are in the repository.
 
 ## Updating from Chinese Studio
 
-The application display name is now **ESC Chinese**. Package filenames start with `esc-chinese-1.2.0-`. Android keeps `live.ztvmm.chinese` and the existing release key. Desktop retains its application ID, local origin and historical data directory; Linux keeps the executable/package identity. Browser progress keys and JSON backup structure are unchanged. Export progress before changing installations. The website and the apps use separate device storage.
+The application display name is now **ESC Chinese**. Package filenames start with `esc-chinese-1.2.1-`. Android keeps `live.ztvmm.chinese` and the existing release key. Desktop retains its application ID, local origin and historical data directory; Linux keeps the executable/package identity. Browser progress keys and JSON backup structure are unchanged. Export progress before changing installations. The website and the apps use separate device storage.

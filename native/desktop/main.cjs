@@ -23,12 +23,9 @@ protocol.registerSchemesAsPrivileged([
     },
   },
 ]);
-// Preserve existing installations’ local progress across the ESC display-name change.
-app.setPath(
-  "userData",
-  process.env.STUDIO_TEST_DATA ||
-    path.join(app.getPath("appData"), "Chinese Studio"),
-);
+// The internal package name stays stable, so Electron retains its legacy data path.
+if (process.env.STUDIO_TEST_DATA)
+  app.setPath("userData", process.env.STUDIO_TEST_DATA);
 const local = (url) => {
   try {
     const u = new URL(url);

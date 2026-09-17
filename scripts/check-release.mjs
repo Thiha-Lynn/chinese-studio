@@ -19,10 +19,10 @@ assert.equal(
 assert.equal(capacitor.appName, "ESC Chinese");
 assert.equal(desktop.build.productName, "ESC Chinese");
 assert.equal(manifest.short_name, "ESC Chinese");
-assert.match(
-  read("native/desktop/main.cjs"),
-  /app\.getPath\("appData"\), "Chinese Studio"/,
-  "Preserve desktop user data",
+assert.equal(
+  desktop.name,
+  "chinese-studio-desktop",
+  "Preserve Electron's existing default data directory",
 );
 assert.equal(
   desktop.build.artifactName,

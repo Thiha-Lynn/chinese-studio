@@ -1,6 +1,6 @@
 {
   "name": "chinese-studio",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "ESC Chinese Language Training Center — lessons and offline practice",
   "scripts": {
     "dev": "vite --host 127.0.0.1",

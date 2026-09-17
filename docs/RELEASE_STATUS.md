@@ -1,4 +1,4 @@
-# ESC release status · 1.2.0
+# ESC release status · 1.2.1
 
 ESC branding and interaction improvements are implemented. Local verification and the new release matrix are recorded in [ESC_UPGRADE.md](ESC_UPGRADE.md). The 1.1.0 results below are retained as historical evidence only.
 
