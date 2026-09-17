@@ -160,18 +160,20 @@ test("oral rehearsal, handwriting, resource viewer and tutor controls", async ({
   page,
 }) => {
   await go(page, "/oral");
-  await page.locator(".oral-groups summary").first().click();
+  await page.locator(".oral-groups .disclosure-toggle").first().click();
+  await expect(
+    page.locator(".oral-groups .disclosure-toggle").first(),
+  ).toHaveAttribute("aria-expanded", "true");
   await page
     .getByLabel("Make it true for you")
     .first()
     .fill("我喜欢学习汉语。");
   await page.getByRole("button", { name: "Read the words" }).click();
-  await expect(page.locator(".reading-grid details")).toHaveCount(30);
-  await page.locator(".reading-grid summary").first().click();
-  await expect(page.locator(".reading-grid details").first()).toHaveAttribute(
-    "open",
-    "",
-  );
+  await expect(page.locator(".reading-grid .disclosure")).toHaveCount(30);
+  await page.locator(".reading-grid .disclosure-toggle").first().click();
+  await expect(
+    page.locator(".reading-grid .disclosure-toggle").first(),
+  ).toHaveAttribute("aria-expanded", "true");
   await page.getByRole("button", { name: "Mock oral test" }).click();
   await page.getByRole("button", { name: "Start rehearsal" }).click();
   for (let i = 0; i < 10; i++) {
@@ -237,7 +239,7 @@ test("installer catalog and mobile keyboard navigation", async ({
     await expect(link).toHaveCount(1);
     await expect(link).toHaveAttribute(
       "href",
-      /\/v1\.2\.2\/esc-chinese-1\.2\.2-/,
+      /\/v1\.2\.3\/esc-chinese-1\.2\.3-/,
     );
   }
   if (info.project.name.includes("mobile")) {
@@ -319,4 +321,23 @@ test("install prompt received before visiting install page remains available", a
   await expect(
     page.getByRole("button", { name: "Install app", exact: true }),
   ).toHaveCount(0);
+});
+
+test("first install never offers a spurious update or shifts study controls", async ({
+  page,
+}) => {
+  await go(page, "/oral");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await expect
+    .poll(() => page.evaluate(() => !!navigator.serviceWorker.controller))
+    .toBe(true);
+  await expect(
+    page.getByRole("button", { name: "Update ESC", exact: true }),
+  ).toHaveCount(0);
+  await page.locator(".oral-groups .disclosure-toggle").first().click();
+  await expect(page.getByLabel("Make it true for you").first()).toBeVisible();
+  await page.locator(".oral-groups .disclosure-toggle").first().press("Space");
+  await expect(
+    page.getByLabel("Make it true for you").first(),
+  ).not.toBeVisible();
 });

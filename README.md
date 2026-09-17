@@ -53,7 +53,7 @@ Application code and original contributions: **MIT**. Original MFU course conten
 
 The [release downloads](https://github.com/Thiha-Lynn/chinese-studio/releases) include native Windows installers, macOS disk images, Linux AppImage/Debian packages and a release-signed Android APK from v1.1.0 onward. All included lessons ship inside each app. See [supported platforms and installation notes](docs/NATIVE_RELEASE.md) and [native build instructions](docs/NATIVE_BUILDS.md). iPhone/iPad use the installable web app. Windows/macOS publisher signing and an iOS IPA are not included.
 
-## ESC 1.2.2
+## ESC 1.2.3
 
 ESC branding covers the app, PWA, launch icons, Android splash screens and desktop installers. The school page links to [ESC’s Facebook page](https://www.facebook.com/profile.php?id=100064139972956) for current class information; dated promotional fees/schedules are not presented as current offers. Included MFU source materials keep their attribution.
 

@@ -4,6 +4,7 @@ import type { Course, Progress } from "./types";
 import { award, shuffle, speak } from "./lib";
 import Recorder from "./Recorder";
 import ChoiceTabs from "./ChoiceTabs";
+import Disclosure from "./Disclosure";
 export default function Oral({
   course,
   progress,
@@ -98,12 +99,16 @@ export default function Oral({
       {tab === "prepare" && (
         <div className="oral-groups">
           {groups.map((g) => (
-            <details className="panel" key={g.number}>
-              <summary>
-                <span className="round-num">{g.number}</span>
-                <h2>{g.title}</h2>
-                <span className="pill">Lesson {g.lesson}</span>
-              </summary>
+            <Disclosure
+              key={g.number}
+              label={
+                <>
+                  <span className="round-num">{g.number}</span>
+                  <span>{g.title}</span>
+                  <span className="pill">Lesson {g.lesson}</span>
+                </>
+              }
+            >
               <p className="muted">{g.note}</p>
               {g.items.map((q: any, i: number) => {
                 const key = `oral-${g.number}-${i}`;
@@ -149,7 +154,7 @@ export default function Oral({
                   </div>
                 );
               })}
-            </details>
+            </Disclosure>
           ))}
         </div>
       )}
@@ -161,11 +166,15 @@ export default function Oral({
           </p>
           <div className="reading-grid">
             {course.exam.vocab.map((w: any) => (
-              <details className="panel" key={w.hanzi}>
-                <summary>
-                  <strong className="hanzi">{w.hanzi}</strong>
-                  <Eye size={16} />
-                </summary>
+              <Disclosure
+                key={w.hanzi}
+                label={
+                  <>
+                    <strong className="hanzi">{w.hanzi}</strong>
+                    <Eye size={16} />
+                  </>
+                }
+              >
                 <p className="pinyin">{w.pinyin}</p>
                 <p>{w.english}</p>
                 <button
@@ -175,7 +184,7 @@ export default function Oral({
                 >
                   <Volume2 size={18} />
                 </button>
-              </details>
+              </Disclosure>
             ))}
           </div>
         </>

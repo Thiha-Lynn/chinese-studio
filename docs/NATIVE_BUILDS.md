@@ -22,4 +22,4 @@ The web app remains the iPhone/iPad distribution. Creating an IPA requires a sep
 
 Official Android release certificate SHA-256: `f31d3ad5f155ba8a7c76177bab1be58455a4e075ef51a13bef70c9e5fa7f975a`. This public fingerprint identifies the signing certificate; private signing material is never published.
 
-ESC 1.2.2 changes product names and icons while preserving installation identities and progress. Run `npm run check:release` after building to detect mismatched platform versions or metadata. Installer smoke tests use the new ESC executable display names.
+ESC 1.2.3 changes product names and icons while preserving installation identities and progress. Run `npm run check:release` after building to detect mismatched platform versions or metadata. Installer smoke tests use the new ESC executable display names.

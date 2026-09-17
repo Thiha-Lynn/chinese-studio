@@ -1,4 +1,4 @@
-# ESC platform upgrade · 1.2.2
+# ESC platform upgrade · 1.2.3
 
 ## Identity and compatibility
 
@@ -30,14 +30,18 @@ Existing application IDs, Android key alias, Electron protocol/user-data directo
 
 - TypeScript and production build; five content/progress/identity/pinyin/native-protocol tests.
 - Release metadata check aligns web, Android and desktop version/name while preserving update identities.
-- Browser suite: 40 checks across Chromium desktop/mobile, Firefox and mobile WebKit, including all routes in both themes and offline operation with the source server stopped.
+- Browser suite: 44 checks across Chromium desktop/mobile, Firefox and mobile WebKit, including all routes in both themes and offline operation with the source server stopped.
 - Native release workflow builds and tests Windows/macOS/Linux on x64 and ARM64, release-signed Android APK on Android 15/16 emulators, and portable ZIP. Publication is gated on all jobs.
-- Local results: all 40 browser checks passed (32 section/workflow/offline checks plus eight preference/install-prompt checks), as did five unit checks, TypeScript/build and metadata checks. The Apple Silicon DMG was mounted, its installed app launched and all 529 resources, handwriting, export and persistence after restart passed. Hosted platform results will be appended after release completion. These checks are not physical-device certification.
+- Local results: 40 browser checks passed (32 section/workflow/offline checks plus eight preference/install-prompt checks), as did five unit checks, TypeScript/build and metadata checks. The Apple Silicon DMG was mounted, its installed app launched and all 529 resources, handwriting, export and persistence after restart passed. Hosted platform results will be appended after release completion. These checks are not physical-device certification.
 
 ## Remaining platform limits
 
 No iOS IPA/App Store distribution or Play Store listing is configured. iPhone/iPad use the installable web app. Windows/macOS publisher certificates and Apple notarization are not configured. Hardware microphone/voice support and all historical OS versions require device-specific acceptance testing. Chinese 1 and missing original MDL media remain unavailable; this release preserves those honest coverage states.
 
-The unpublished 1.2.0 candidate was stopped during release review: Electron’s default user-data directory is based on the unchanged internal package name `chinese-studio-desktop`, not the display name. Version 1.2.2 retains that default; a direct Electron runtime check verified the legacy path. No 1.2.0 installer was published or deployed.
+The unpublished 1.2.0 candidate was stopped during release review: Electron’s default user-data directory is based on the unchanged internal package name `chinese-studio-desktop`, not the display name. Version 1.2.3 retains that default; a direct Electron runtime check verified the legacy path. No 1.2.0 installer was published or deployed.
 
-The unpublished 1.2.1 candidate failed the clean-install gate after a version edit affected dependency lockfile entries. Version 1.2.2 restores the original dependency graph and changes only application version fields; fresh `npm ci` checks are required before tagging.
+The unpublished 1.2.1 candidate failed the clean-install gate after a version edit affected dependency lockfile entries. Version 1.2.3 restores the original dependency graph and changes only application version fields; fresh `npm ci` checks are required before tagging.
+
+The hosted Firefox/Linux check found the native oral-preparation disclosure did not open reliably on pointer click. Version 1.2.3 uses explicit keyboard-accessible buttons with controlled expanded state for oral and reading panels; the test asserts expansion before filling the answer.
+
+Investigation also found that a first service-worker install could briefly appear as an update, inserting a notice during a click. The updater now requires an existing controller, clears activated workers, and displays a dismissible floating notice that cannot shift lesson controls. A fresh-install regression test covers all four browser configurations.
