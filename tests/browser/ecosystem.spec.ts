@@ -237,7 +237,7 @@ test("installer catalog and mobile keyboard navigation", async ({
     await expect(link).toHaveCount(1);
     await expect(link).toHaveAttribute(
       "href",
-      /\/v1\.2\.1\/esc-chinese-1\.2\.1-/,
+      /\/v1\.2\.2\/esc-chinese-1\.2\.2-/,
     );
   }
   if (info.project.name.includes("mobile")) {

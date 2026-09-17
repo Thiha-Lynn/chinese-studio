@@ -1,4 +1,4 @@
-# ESC platform upgrade · 1.2.1
+# ESC platform upgrade · 1.2.2
 
 ## Identity and compatibility
 
@@ -38,4 +38,6 @@ Existing application IDs, Android key alias, Electron protocol/user-data directo
 
 No iOS IPA/App Store distribution or Play Store listing is configured. iPhone/iPad use the installable web app. Windows/macOS publisher certificates and Apple notarization are not configured. Hardware microphone/voice support and all historical OS versions require device-specific acceptance testing. Chinese 1 and missing original MDL media remain unavailable; this release preserves those honest coverage states.
 
-The unpublished 1.2.0 candidate was stopped during release review: Electron’s default user-data directory is based on the unchanged internal package name `chinese-studio-desktop`, not the display name. Version 1.2.1 retains that default; a direct Electron runtime check verified the legacy path. No 1.2.0 installer was published or deployed.
+The unpublished 1.2.0 candidate was stopped during release review: Electron’s default user-data directory is based on the unchanged internal package name `chinese-studio-desktop`, not the display name. Version 1.2.2 retains that default; a direct Electron runtime check verified the legacy path. No 1.2.0 installer was published or deployed.
+
+The unpublished 1.2.1 candidate failed the clean-install gate after a version edit affected dependency lockfile entries. Version 1.2.2 restores the original dependency graph and changes only application version fields; fresh `npm ci` checks are required before tagging.
