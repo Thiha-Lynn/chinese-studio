@@ -31,17 +31,21 @@ Existing application IDs, Android key alias, Electron protocol/user-data directo
 - TypeScript and production build; five content/progress/identity/pinyin/native-protocol tests.
 - Release metadata check aligns web, Android and desktop version/name while preserving update identities.
 - Browser suite: 44 checks across Chromium desktop/mobile, Firefox and mobile WebKit, including all routes in both themes and offline operation with the source server stopped.
-- Native release workflow builds and tests Windows/macOS/Linux on x64 and ARM64, release-signed Android APK on Android 15/16 emulators, and portable ZIP. Publication is gated on all jobs.
-- Local results: 40 browser checks passed (32 section/workflow/offline checks plus eight preference/install-prompt checks), as did five unit checks, TypeScript/build and metadata checks. The Apple Silicon DMG was mounted, its installed app launched and all 529 resources, handwriting, export and persistence after restart passed. Hosted platform results will be appended after release completion. These checks are not physical-device certification.
+- All 44 browser checks passed locally and on the hosted Linux runner, along with five unit checks, TypeScript/build, clean dependency installs and release metadata validation.
+- [Native release run](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686557) passed every gate for commit `61e3ee58bdf4fadd2a8882f89943d51112632b95`: six desktop architecture jobs, signed Android lint/build/signature and bundled-file verification, Android 15/16 offline emulator tests, web tests and portable packaging.
+- Desktop installer tests launched the installed Windows/macOS/Linux apps on x64 and ARM64, loaded all 529 resources, exercised handwriting and export, checked narrow windows, and verified persistence after restart. The local Apple Silicon DMG independently passed these checks.
+- [Source verification](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686571) passed the Windows/macOS/Linux build matrix.
+- [Version 1.2.3](https://github.com/Thiha-Lynn/chinese-studio/releases/tag/v1.2.3) is published with ten downloads and SHA256SUMS. Every public asset returned HTTP 200 with the expected size; GitHub asset SHA-256 digests matched the checksum manifest.
+- The live website was switched to the same 1.2.3 build after checking all 551 deployed web files by SHA-256. HTTPS health, the `a940d8de7abd9f14` offline manifest, ten lessons, 249 vocabulary entries, school/lesson/offline pages, icons and resource delivery passed. The previous release and external account database remain available for rollback.
+- The public ESC dashboard, school page and all ten versioned download links were checked in the browser. A legacy cached browser session held the new worker in its waiting state; activating that verified worker preserved storage and normal reload then opened ESC.
+- Runner, emulator and browser checks are not physical-device certification.
 
 ## Remaining platform limits
 
 No iOS IPA/App Store distribution or Play Store listing is configured. iPhone/iPad use the installable web app. Windows/macOS publisher certificates and Apple notarization are not configured. Hardware microphone/voice support and all historical OS versions require device-specific acceptance testing. Chinese 1 and missing original MDL media remain unavailable; this release preserves those honest coverage states.
 
-The unpublished 1.2.0 candidate was stopped during release review: Electron’s default user-data directory is based on the unchanged internal package name `chinese-studio-desktop`, not the display name. Version 1.2.3 retains that default; a direct Electron runtime check verified the legacy path. No 1.2.0 installer was published or deployed.
+## Upgrade safeguards
 
-The unpublished 1.2.1 candidate failed the clean-install gate after a version edit affected dependency lockfile entries. Version 1.2.3 restores the original dependency graph and changes only application version fields; fresh `npm ci` checks are required before tagging.
+Electron retains its default data directory based on the unchanged internal name `chinese-studio-desktop`; a direct runtime check confirmed the legacy path. Application version changes leave dependency versions and resolved lock entries intact, verified by fresh `npm ci` installs.
 
-The hosted Firefox/Linux check found the native oral-preparation disclosure did not open reliably on pointer click. Version 1.2.3 uses explicit keyboard-accessible buttons with controlled expanded state for oral and reading panels; the test asserts expansion before filling the answer.
-
-Investigation also found that a first service-worker install could briefly appear as an update, inserting a notice during a click. The updater now requires an existing controller, clears activated workers, and displays a dismissible floating notice that cannot shift lesson controls. A fresh-install regression test covers all four browser configurations.
+Oral preparation and reading panels use keyboard-accessible buttons with controlled expanded state; browser tests assert expansion before answer entry. The web updater requires an existing controller, clears activated workers, and displays a dismissible floating notice that cannot shift lesson controls. A fresh-install regression test covers all four browser configurations.

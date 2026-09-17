@@ -1,39 +1,31 @@
 # ESC release status · 1.2.3
 
-ESC branding and interaction improvements are implemented. Local verification and the new release matrix are recorded in [ESC_UPGRADE.md](ESC_UPGRADE.md). The 1.1.0 results below are retained as historical evidence only.
+ESC Chinese 1.2.3 is published and live at https://chinese.ztvmm.live. The release source is commit `61e3ee58bdf4fadd2a8882f89943d51112632b95`; later documentation-only commits record the verification results.
 
-## Historical release · 1.1.0
+- [Download apps and checksums](https://github.com/Thiha-Lynn/chinese-studio/releases/tag/v1.2.3)
+- [Native release validation](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686557): all jobs passed.
+- [Source build matrix](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686571): all jobs passed.
+- [Detailed section audit and deployment evidence](ESC_UPGRADE.md)
 
-## Included
+## Included and verified
 
-Public Chinese 2 learning app with one responsive workflow, dark/light display, local progress, portable backups, full downloadable lesson pack and an installable web manifest. Ten classroom lessons, 485 slide-text pages, 249 vocabulary entries and 333 bundled stroke guides. MIT application license, contributor guide, third-party attribution, build/test CI and portable release packaging.
+Navy-and-gold ESC identity across the website, PWA, Android and desktop apps; school information and Facebook links; consistent selected, expanded and disabled controls; keyboard/mobile navigation, theme and layout improvements; progress compatibility and a complete platform download center.
 
-Live host: https://chinese.ztvmm.live (dedicated service on the existing AWS host, HTTPS, persistent account database outside release files). The public source and release are at https://github.com/Thiha-Lynn/chinese-studio.
+Ten Chinese 2 lessons, 485 slide-text pages, 249 vocabulary entries, 333 stroke guides and 529 offline resources retain their source attribution. The native apps include the available library for first-launch offline study.
 
-## Verification
+All 44 browser checks and five unit checks passed. Desktop packages were installed/extracted and launched on Windows, macOS and Linux on both x64 and ARM64. Signed Android APK installation and offline study passed on Android 15 and 16 emulators. The portable ZIP and all ten public downloads were verified; release asset digests match SHA256SUMS. The live deployment's 551 web files match the local release build.
 
-- TypeScript check and production build.
-- Content counts and referenced resources; malformed progress imports; verified-domain account policy; pinyin ü normalization.
-- Desktop Chromium, mobile Chromium emulation, Firefox and mobile WebKit emulation: lesson navigation, responsive width, themes, practice, local persistence and valid/invalid backup import/export.
-- Offline pack: origin server is stopped after download, then lessons are reloaded, lazy handwriting opens and PDF range reads succeed. Chromium/Firefox also use simulated network disconnection. WebKit's simulated-offline mode rejects service-worker requests in this runner; stopping the origin verifies an actual unreachable server without relying on that emulation.
-- OS build matrix passed in GitHub Actions for macOS, Windows and Linux on the release source. The portable release workflow completed and attached the ZIP and SHA-256 checksum.
+## Platform support and limits
 
-Browser engine/mobile emulation is not physical-device certification. Real-device installation, microphone and device Mandarin voices still need acceptance checks on the intended macOS, Windows, Linux, Android and iOS devices. Version 1.1.0 adds Windows EXE, macOS DMG, Linux AppImage/Debian and Android APK packages with the complete available library bundled. Desktop packages cover x64 and ARM64; Android uses the device WebView. See [native compatibility and signing notes](NATIVE_RELEASE.md). App Store / Play Store listings and an iOS IPA are not included. Only the separate portable ZIP requires Node.js 24+.
+Android APK; Windows x64/ARM64 EXE; Intel/Apple Silicon macOS DMG; Linux x64/ARM64 DEB and AppImage; portable ZIP; responsive web/PWA. iPhone/iPad use the installable web app. See [compatibility and installation notes](NATIVE_RELEASE.md) and [build instructions](NATIVE_BUILDS.md).
 
-## Remaining dependencies and scope
+Windows/macOS publisher signing and Apple notarization are not configured. There is no signed iOS IPA, App Store release or Play Store listing. Physical-device microphone/voice availability and every historical operating-system version are not certified by runner/emulator tests. Only the portable ZIP needs a separate Node.js installation.
 
-- Google sign-in and account backups are implemented. A dedicated Google Cloud project has been created; OAuth client creation and consent-screen publication await the owner’s approval of Google’s User Data Policy. Account backups use explicit save/load, not automatic multi-device merging.
-- The tutor provider connection is configured server-side and a Mandarin reply was verified. Live tutor access requires Google sign-in, whose setup is still pending. It does not run offline.
-- Chinese 1 awaits the authorized account/export previously requested.
-- MDL story audio, video and official assessment banks are partial, not a complete portal clone. The source coverage screen records this. Some source downloads remain on the official portal.
-- Original MFU resources are distributed on the project owner's permission confirmation and retain their original rights. They are not covered by the application’s MIT license.
+## Existing service and content dependencies
 
-## Native release validation
+- Google sign-in and account backups are implemented, but OAuth client/consent-screen publication remains pending the owner's completion of Google's policy process. Account backups use explicit save/load rather than automatic multi-device merging.
+- Tutor access needs the existing online provider configuration and Google sign-in. It is not an offline model.
+- Chinese 1 still awaits an authorized account/export. Missing MDL audio/video and official assessment content are recorded in the source coverage screen.
+- MFU course resources and stroke data retain their original rights; the application MIT license does not relicense that material.
 
-Pre-release validation passed for the installable packages:
-
-- [Desktop installer run](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35061911191): Windows x64/ARM64 EXE installation; Intel/Apple Silicon Mac DMG installation; Linux x64/ARM64 Debian and AppImage payloads. Each installed app loaded all 529 offline resources, opened handwriting, exported progress, fit a narrow window and retained learned words after restarting.
-- [Android run](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35061417083): lint, release signing verification, all 551 bundled web files checked by SHA-256, offline lesson/handwriting and progress instrumentation, rotation, and signed APK installation/launch on Android 15 and 16 emulators with Wi-Fi and mobile data disabled.
-- [Web verification](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35061912682): Windows/macOS/Linux build matrix and the twelve browser checks.
-
-The [v1.1.0 tagged release run](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35062439640) passed all required gates and published ten downloads plus SHA256SUMS. Every public download was checked for availability, size and a GitHub asset digest matching the checksum manifest. Linux x64 release filenames were normalized after publication without changing the tested binaries; the publishing workflow now performs that normalization automatically. The live website was switched to 1.1.0 and its content manifest, ten lessons, lesson notes, seven direct installer links and responsive widths were checked in desktop/mobile Chromium and mobile WebKit. Hardware microphone/voice availability and older supported operating-system versions have not been physically certified. Windows/macOS publisher signatures and Apple iOS provisioning remain outside this release.
+The upgrade preserves application IDs, Android signing identity, Electron storage, browser progress keys, backup schema and the external production account database. The preceding production release remains available for rollback.
