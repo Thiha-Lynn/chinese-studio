@@ -23,7 +23,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm test && npm run build
+      - run: npm test && npm run build && npm run check:release
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run test:e2e
       - run: npm run release:portable
@@ -134,7 +134,7 @@ jobs:
           ./gradlew --no-daemon :app:lintRelease :app:assembleRelease :app:assembleDebug :app:assembleDebugAndroidTest
           "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --print-certs app/build/outputs/apk/release/app-release.apk
           mkdir -p ../release/android
-          cp app/build/outputs/apk/release/app-release.apk ../release/android/chinese-studio-1.1.0-android.apk
+          cp app/build/outputs/apk/release/app-release.apk ../release/android/esc-chinese-$(node -p "require('../package.json').version")-android.apk
           cd ..
           python3 scripts/verify-apk.py
       - name: Enable emulator acceleration
@@ -213,4 +213,4 @@ jobs:
           done
           sha256sum *.exe *.dmg *.AppImage *.deb *.apk *.zip > SHA256SUMS
           cd ..
-          gh release create "$GITHUB_REF_NAME" release/*.exe release/*.dmg release/*.AppImage release/*.deb release/*.apk release/*.zip release/SHA256SUMS --title "Chinese Studio $GITHUB_REF_NAME" --notes-file docs/NATIVE_RELEASE.md
+          gh release create "$GITHUB_REF_NAME" release/*.exe release/*.dmg release/*.AppImage release/*.deb release/*.apk release/*.zip release/SHA256SUMS --title "ESC Chinese $GITHUB_REF_NAME" --notes-file docs/NATIVE_RELEASE.md

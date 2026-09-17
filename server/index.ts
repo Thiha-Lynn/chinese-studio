@@ -492,6 +492,6 @@ app.use(
 const port = Number(process.env.PORT || 4173);
 app.listen(port, "127.0.0.1", () =>
   console.log(
-    `Chinese Studio listening on 127.0.0.1:${port}; mode=${mode}; preview=${preview}`,
+    `ESC Chinese listening on 127.0.0.1:${port}; mode=${mode}; preview=${preview}`,
   ),
 );

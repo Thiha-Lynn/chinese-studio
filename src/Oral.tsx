@@ -3,6 +3,7 @@ import { ArrowRight, Mic, Volume2, Play, Eye } from "lucide-react";
 import type { Course, Progress } from "./types";
 import { award, shuffle, speak } from "./lib";
 import Recorder from "./Recorder";
+import ChoiceTabs from "./ChoiceTabs";
 export default function Oral({
   course,
   progress,
@@ -84,21 +85,16 @@ export default function Oral({
         </h1>
         <p>Oral Test 1: 5 reading items + 5 questions · 15 points.</p>
       </div>
-      <div className="tabs">
-        {[
+      <ChoiceTabs
+        label="Oral practice sections"
+        value={tab}
+        onChange={setTab}
+        options={[
           ["prepare", "Prepare my answers"],
           ["reading", "Read the words"],
           ["test", "Mock oral test"],
-        ].map(([k, label]) => (
-          <button
-            key={k}
-            className={tab === k ? "active" : ""}
-            onClick={() => setTab(k)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+        ]}
+      />
       {tab === "prepare" && (
         <div className="oral-groups">
           {groups.map((g) => (
@@ -231,6 +227,7 @@ export default function Oral({
               <button
                 className="btn secondary"
                 onClick={() => setShown(!shown)}
+                aria-expanded={shown}
               >
                 <Eye size={17} /> {shown ? "Hide help" : "Reveal help"}
               </button>

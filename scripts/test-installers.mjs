@@ -32,9 +32,9 @@ try {
     console.log("Installed files:", await readdir(destination));
     console.log(
       "Installed executable bytes:",
-      (await stat(path.join(destination, "Chinese Studio.exe"))).size,
+      (await stat(path.join(destination, "ESC Chinese.exe"))).size,
     );
-    test(path.join(destination, "Chinese Studio.exe"));
+    test(path.join(destination, "ESC Chinese.exe"));
   } else if (process.platform === "darwin") {
     const mount = path.join(work, "mounted");
     run("hdiutil", [
@@ -46,9 +46,9 @@ try {
       mount,
     ]);
     try {
-      const app = path.join(work, "Chinese Studio.app");
-      run("ditto", [path.join(mount, "Chinese Studio.app"), app]);
-      test(path.join(app, "Contents/MacOS/Chinese Studio"));
+      const app = path.join(work, "ESC Chinese.app");
+      run("ditto", [path.join(mount, "ESC Chinese.app"), app]);
+      test(path.join(app, "Contents/MacOS/ESC Chinese"));
     } finally {
       run("hdiutil", ["detach", mount]);
     }

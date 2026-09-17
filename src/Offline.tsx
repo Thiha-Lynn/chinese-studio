@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { bundledApp } from "./native";
+import { brand, installers, releaseFile } from "./brand";
+import { getInstallPrompt, clearInstallPrompt } from "./install";
+import { Download, ArrowUpRight, CheckCircle2 } from "lucide-react";
 type Pack = {
   version: string;
   core: string[];
@@ -11,7 +14,7 @@ export default function Offline() {
     [pack, setPack] = useState<Pack | null>(null),
     [installed, setInstalled] = useState(false),
     [count, setCount] = useState(0),
-    [install, setInstall] = useState<any>(null);
+    [install, setInstall] = useState(getInstallPrompt);
   useEffect(() => {
     fetch("/offline-manifest.json")
       .then((r) => {
@@ -22,23 +25,27 @@ export default function Offline() {
       .catch(() =>
         setStatus("Offline downloads are available in the built app."),
       );
-    const f = (e: Event) => {
-      e.preventDefault();
-      setInstall(e);
-    };
-    window.addEventListener("beforeinstallprompt", f);
-    return () => window.removeEventListener("beforeinstallprompt", f);
+    const f = () => setInstall(getInstallPrompt());
+    window.addEventListener("esc-install-ready", f);
+    return () => window.removeEventListener("esc-install-ready", f);
   }, []);
   useEffect(() => {
     if (bundledApp || !pack || !("caches" in window)) return;
-    caches.open("chinese-pack-" + pack.version).then(async (c) => {
-      const keys = await c.keys();
-      setInstalled(
-        pack.files.every((f) =>
-          keys.some((k) => k.url === new URL(f.url, location.origin).href),
+    caches
+      .open("chinese-pack-" + pack.version)
+      .then(async (c) => {
+        const keys = await c.keys();
+        setInstalled(
+          pack.files.every((f) =>
+            keys.some((k) => k.url === new URL(f.url, location.origin).href),
+          ),
+        );
+      })
+      .catch(() =>
+        setStatus(
+          "Browser storage is unavailable. Try a regular browser window or download an app below.",
         ),
       );
-    });
   }, [pack]);
   async function download() {
     if (!pack || busy) return;
@@ -46,7 +53,11 @@ export default function Offline() {
     setStatus("Saving lessons and resources. Keep this page open.");
     setCount(0);
     try {
-      await navigator.serviceWorker.ready;
+      if (!navigator.serviceWorker?.controller) {
+        const registration = await navigator.serviceWorker.getRegistration();
+        if (!registration?.active)
+          throw Error("Offline setup is not ready. Reload and retry.");
+      }
       const cache = await caches.open("chinese-pack-" + pack.version);
       let complete = 0;
       for (let i = 0; i < pack.files.length; i += 4) {
@@ -83,13 +94,22 @@ export default function Offline() {
     }
   }
   async function remove() {
-    if (!pack) return;
-    for (const name of await caches.keys()) {
-      if (name.startsWith("chinese-pack-")) await caches.delete(name);
+    if (!pack || busy) return;
+    setBusy(true);
+    try {
+      for (const name of await caches.keys()) {
+        if (name.startsWith("chinese-pack-")) await caches.delete(name);
+      }
+      setInstalled(false);
+      setCount(0);
+      setStatus("Downloaded resources removed. Your progress is unchanged.");
+    } catch {
+      setStatus(
+        "Could not remove saved resources. Check browser storage permissions and retry.",
+      );
+    } finally {
+      setBusy(false);
     }
-    setInstalled(false);
-    setCount(0);
-    setStatus("Downloaded resources removed. Your progress is unchanged.");
   }
   return (
     <>
@@ -115,7 +135,12 @@ export default function Offline() {
           {!bundledApp && (
             <button
               className="btn"
-              disabled={busy || !pack || !("serviceWorker" in navigator)}
+              disabled={
+                busy ||
+                !pack ||
+                !("serviceWorker" in navigator) ||
+                !("caches" in window)
+              }
               onClick={download}
             >
               {busy
@@ -141,7 +166,7 @@ export default function Offline() {
                   : "The app and lesson text save automatically after your first online visit.")}{" "}
           </p>
           {installed && (
-            <button className="text-button" onClick={remove}>
+            <button className="text-button" disabled={busy} onClick={remove}>
               Remove downloaded resources
             </button>
           )}
@@ -153,9 +178,7 @@ export default function Offline() {
         </section>
         <section className="panel">
           <h2>
-            {bundledApp
-              ? "Updates and other devices"
-              : "Install Chinese Studio"}
+            {bundledApp ? "Updates and other devices" : "Install ESC Chinese"}
           </h2>
           {bundledApp ? (
             <p>
@@ -166,8 +189,19 @@ export default function Offline() {
             <button
               className="btn"
               onClick={async () => {
-                await install.prompt();
-                setInstall(null);
+                try {
+                  await install.prompt();
+                  const choice = await install.userChoice;
+                  setStatus(
+                    choice.outcome === "accepted"
+                      ? "ESC Chinese installation started."
+                      : "Installation dismissed. You can install from the browser menu later.",
+                  );
+                } catch {
+                  setStatus("Use your browser’s Install app menu to continue.");
+                } finally {
+                  clearInstallPrompt();
+                }
               }}
             >
               Install app
@@ -195,45 +229,103 @@ export default function Offline() {
             need a connection. Speech playback depends on a Mandarin voice
             installed on your device.
           </p>
-          <h3>Download an app</h3>
-          <ul className="app-downloads">
-            {[
-              ["Windows · Intel / AMD", "win-x64.exe"],
-              ["Windows · ARM", "win-arm64.exe"],
-              ["Mac · Apple Silicon", "mac-arm64.dmg"],
-              ["Mac · Intel", "mac-x64.dmg"],
-              ["Linux · Intel / AMD", "linux-x64.AppImage"],
-              ["Linux · ARM", "linux-arm64.AppImage"],
-              ["Android · phone or tablet", "android.apk"],
-            ].map(([label, file]) => (
-              <li key={file}>
-                <a
-                  href={
-                    "https://github.com/Thiha-Lynn/chinese-studio/releases/download/v1.1.0/chinese-studio-1.1.0-" +
-                    file
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {label} ↗
-                </a>
-              </li>
-            ))}
-          </ul>
-          <small>
-            Windows 10+ (ARM: 11), macOS 13+, Ubuntu 24.04, Android 7+ with an
-            updated WebView. Windows and Mac packages are unsigned. iPhone and
-            iPad use Add to Home Screen.
-          </small>
           <a
-            href="https://github.com/Thiha-Lynn/chinese-studio/releases"
+            className="text-button"
+            href={brand.website}
             target="_blank"
             rel="noreferrer"
           >
-            Download Windows, Mac, Linux and Android apps ↗
+            Open the live learning platform <ArrowUpRight size={16} />
           </a>
         </section>
       </div>
+      <section
+        className="download-section"
+        aria-labelledby="app-download-heading"
+      >
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">
+              ESC CHINESE · VERSION {brand.version}
+            </span>
+            <h2 id="app-download-heading">One school. Every screen.</h2>
+          </div>
+          <span className="pill">
+            <CheckCircle2 size={14} /> Lessons included
+          </span>
+        </div>
+        <p>
+          Desktop and Android apps include the complete available library.
+          Choose the package that matches your device.
+        </p>
+        <div className="download-grid">
+          {installers.map(({ platform, detail, options }) => (
+            <section className="panel download-card" key={platform}>
+              <Download size={23} />
+              <h3>{platform}</h3>
+              <p>{detail}</p>
+              <div className="download-options">
+                {options.map(([label, file]) => (
+                  <a
+                    className="btn secondary"
+                    key={file}
+                    href={releaseFile(file)}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Download ${platform} ${label}`}
+                  >
+                    {label}
+                    <ArrowUpRight size={15} />
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+          <section className="panel download-card">
+            <Download size={23} />
+            <h3>iPhone & iPad</h3>
+            <p>Safari 16 or later · installable web app</p>
+            <p>
+              Open ESC in Safari, tap Share → Add to Home Screen, then save your
+              lessons for offline study.
+            </p>
+          </section>
+          <section className="panel download-card">
+            <Download size={23} />
+            <h3>Portable web app</h3>
+            <p>Windows, macOS & Linux · Node.js 24–26</p>
+            <a
+              className="btn secondary"
+              href={releaseFile("portable.zip")}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Download ZIP <ArrowUpRight size={15} />
+            </a>
+          </section>
+        </div>
+        <div className="soft-note">
+          <strong>Before installing</strong>
+          <p>
+            Windows and Mac packages do not have publisher signing or Apple
+            notarization. Android APK updates use the existing app signing key.
+            AppImage may need FUSE; Debian users can choose DEB. iPhone and iPad
+            use the web app.
+          </p>
+          <p>
+            Device progress stays on each device. Export a backup in My progress
+            before moving to another device; earlier Chinese Studio backups
+            still work.
+          </p>
+          <a
+            href={`${brand.releases}/tag/v${brand.version}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Release notes & checksums ↗
+          </a>
+        </div>
+      </section>
     </>
   );
 }

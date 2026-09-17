@@ -258,9 +258,10 @@ export default function Practice({
             className={"flip-card " + (flipped ? "flipped" : "")}
             onClick={() => setFlipped(!flipped)}
             aria-label={flipped ? "Show Chinese word" : "Flip to meaning"}
+            aria-pressed={flipped}
           >
             <span className="flip-inner">
-              <span className="flip-front">
+              <span className="flip-front" aria-hidden={flipped}>
                 {word.image && (
                   <img src={word.image} alt="Vocabulary illustration" />
                 )}
@@ -269,7 +270,7 @@ export default function Practice({
                 </strong>
                 <small>Tap to turn it over ↻</small>
               </span>
-              <span className="flip-back">
+              <span className="flip-back" aria-hidden={!flipped}>
                 <strong className="hanzi">{word.hanzi}</strong>
                 <span className="pinyin">{word.pinyin}</span>
                 <h2>{word.meaning}</h2>

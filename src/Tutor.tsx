@@ -20,6 +20,20 @@ export default function Tutor({
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const box = useRef<HTMLDivElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const launchButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    closeButton.current?.focus();
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        launchButton.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, [open]);
   useEffect(() => {
     box.current?.scrollTo({
       top: box.current.scrollHeight,
@@ -51,9 +65,12 @@ export default function Tutor({
   return (
     <>
       <button
+        ref={launchButton}
         className="tutor-launch"
         onClick={() => setOpen(true)}
         aria-label="Open AI study tutor"
+        aria-expanded={open}
+        aria-controls="esc-tutor"
       >
         <img src="/art/Fox.webp" alt="" />
         <span>
@@ -63,6 +80,7 @@ export default function Tutor({
       {open && (
         <aside
           className="tutor"
+          id="esc-tutor"
           role="dialog"
           aria-modal="false"
           aria-label="AI study tutor"
@@ -72,7 +90,7 @@ export default function Tutor({
               <MessageCircle />
             </span>
             <div>
-              <strong>Your study buddy</strong>
+              <strong>ESC study tutor</strong>
               <small>
                 {lesson ? `Lesson ${lesson} · ` : ""}
                 {activity}
@@ -80,7 +98,11 @@ export default function Tutor({
             </div>
             <button
               className="icon-button"
-              onClick={() => setOpen(false)}
+              ref={closeButton}
+              onClick={() => {
+                setOpen(false);
+                launchButton.current?.focus();
+              }}
               aria-label="Close AI tutor"
             >
               <X />
@@ -107,7 +129,11 @@ export default function Tutor({
                   "Ask me one speaking question",
                   "Help me make a natural sentence",
                 ].map((t) => (
-                  <button key={t} onClick={() => send(t)}>
+                  <button
+                    key={t}
+                    disabled={!available || busy}
+                    onClick={() => send(t)}
+                  >
                     {t} ↗
                   </button>
                 ))}
@@ -145,6 +171,7 @@ export default function Tutor({
             </label>
             <textarea
               id="tutor-question"
+              disabled={!available || busy}
               maxLength={2000}
               value={input}
               onChange={(e) => setInput(e.target.value)}

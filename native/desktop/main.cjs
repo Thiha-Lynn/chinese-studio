@@ -23,8 +23,12 @@ protocol.registerSchemesAsPrivileged([
     },
   },
 ]);
-if (process.env.STUDIO_TEST_DATA)
-  app.setPath("userData", process.env.STUDIO_TEST_DATA);
+// Preserve existing installations’ local progress across the ESC display-name change.
+app.setPath(
+  "userData",
+  process.env.STUDIO_TEST_DATA ||
+    path.join(app.getPath("appData"), "Chinese Studio"),
+);
 const local = (url) => {
   try {
     const u = new URL(url);
@@ -122,8 +126,8 @@ else {
         height: 850,
         minWidth: 360,
         minHeight: 480,
-        title: "Chinese Studio",
-        backgroundColor: "#f5f7fa",
+        title: "ESC Chinese",
+        backgroundColor: "#102b50",
         webPreferences: {
           nodeIntegration: false,
           contextIsolation: true,

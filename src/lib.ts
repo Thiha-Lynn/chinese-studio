@@ -66,7 +66,11 @@ export function review(p: Progress, id: string, good: boolean): Progress {
     good ? 3 : 1,
   );
 }
-export function speak(text: string, onError?: (t: string) => void) {
+export function speak(
+  text: string,
+  onError: (t: string) => void = (message) =>
+    window.dispatchEvent(new CustomEvent("esc-notice", { detail: message })),
+) {
   if (mobileApp) {
     void speakMobile(text).catch(() =>
       onError?.(
@@ -87,10 +91,12 @@ export function speak(text: string, onError?: (t: string) => void) {
     speechSynthesis.getVoices().find((v) => v.lang === "zh-CN") ||
     speechSynthesis.getVoices().find((v) => v.lang.startsWith("zh")) ||
     null;
-  u.onerror = () =>
+  u.onerror = (event) => {
+    if (["canceled", "interrupted"].includes(event.error)) return;
     onError?.(
       "Could not play speech. Check your device’s Chinese voice settings.",
     );
+  };
   speechSynthesis.speak(u);
 }
 export const normalizePinyin = (s: string) =>

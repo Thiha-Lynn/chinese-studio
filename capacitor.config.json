@@ -1,7 +1,10 @@
 {
   "appId": "live.ztvmm.chinese",
-  "appName": "Chinese Studio",
+  "appName": "ESC Chinese",
   "webDir": "build/client",
-  "android": {"allowMixedContent": false, "webContentsDebuggingEnabled": false},
-  "server": {"androidScheme": "https"}
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  },
+  "server": { "androidScheme": "https" }
 }

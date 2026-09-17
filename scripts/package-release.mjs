@@ -8,7 +8,7 @@ import {
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 const version = JSON.parse(readFileSync("package.json", "utf8")).version;
-const name = `chinese-studio-${version}-portable`,
+const name = `esc-chinese-${version}-portable`,
   dir = `release/${name}`;
 rmSync(dir, { recursive: true, force: true });
 mkdirSync(dir, { recursive: true });
@@ -27,7 +27,7 @@ writeFileSync(
 );
 writeFileSync(
   dir + "/START-HERE.txt",
-  "Chinese Studio portable\nInstall Node.js 24+ once.\nWindows: double-click start.cmd\nmacOS/Linux: run sh start.sh in Terminal\nOpen http://127.0.0.1:4173/learn\nAll course files are bundled; no internet needed. Progress is stored in your browser, not this folder. Export before changing browsers.\n",
+  "ESC Chinese portable\nInstall Node.js 24+ once.\nWindows: double-click start.cmd\nmacOS/Linux: run sh start.sh in Terminal\nOpen http://127.0.0.1:4173/learn\nAll course files are bundled; no internet needed. Progress is stored in your browser, not this folder. Export before changing browsers.\n",
 );
 const zip = name + ".zip";
 if (process.platform === "win32")

@@ -1,5 +1,5 @@
 [Unit]
-Description=Chinese Studio public learning service
+Description=ESC Chinese public learning service
 After=network.target
 [Service]
 Type=simple

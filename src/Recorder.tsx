@@ -88,7 +88,7 @@ export default function Recorder() {
           <a
             className="icon-button"
             href={url}
-            download={`chinese-practice.${extension}`}
+            download={`esc-chinese-practice.${extension}`}
             aria-label="Download my recording"
           >
             <Download size={18} />
@@ -96,7 +96,7 @@ export default function Recorder() {
         )}
       </div>
       {url && <audio controls src={url} />}
-      <small>
+      <small role="status">
         {status || "Optional · stays on this device · never sent to the tutor"}
       </small>
     </div>

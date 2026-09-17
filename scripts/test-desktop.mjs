@@ -6,9 +6,9 @@ const os = process.platform,
   arch = process.arch;
 const executablePath =
   os === "darwin"
-    ? `release/desktop/mac${arch === "arm64" ? "-arm64" : ""}/Chinese Studio.app/Contents/MacOS/Chinese Studio`
+    ? `release/desktop/mac${arch === "arm64" ? "-arm64" : ""}/ESC Chinese.app/Contents/MacOS/ESC Chinese`
     : os === "win32"
-      ? `release/desktop/win${arch === "arm64" ? "-arm64" : ""}-unpacked/Chinese Studio.exe`
+      ? `release/desktop/win${arch === "arm64" ? "-arm64" : ""}-unpacked/ESC Chinese.exe`
       : `release/desktop/linux${arch === "arm64" ? "-arm64" : ""}-unpacked/chinese-studio-desktop`;
 const data = await mkdtemp(path.join(tmpdir(), "chinese-native-test-"));
 const options = {

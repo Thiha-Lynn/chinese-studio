@@ -1,13 +1,13 @@
 {
   "id": "/",
-  "name": "Chinese Studio",
-  "short_name": "Chinese Studio",
-  "description": "Chinese lessons, vocabulary, speaking and handwriting practice, online and offline.",
+  "name": "ESC Chinese Language Training Center",
+  "short_name": "ESC Chinese",
+  "description": "ESC Chinese — Chinese language lessons, speaking and handwriting practice, online and offline.",
   "start_url": "/learn",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f5f7fb",
-  "theme_color": "#4c5cce",
+  "background_color": "#f6f7f9",
+  "theme_color": "#102b50",
   "lang": "en",
   "icons": [
     {
@@ -24,7 +24,13 @@
     }
   ],
   "shortcuts": [
-    { "name": "Practice", "url": "/practice" },
-    { "name": "Offline lessons", "url": "/offline" }
+    {
+      "name": "Practice",
+      "url": "/practice"
+    },
+    {
+      "name": "Offline lessons",
+      "url": "/offline"
+    }
   ]
 }

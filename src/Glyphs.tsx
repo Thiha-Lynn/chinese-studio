@@ -37,10 +37,10 @@ export default function Glyphs({
         width: 280,
         height: 280,
         padding: 22,
-        strokeColor: "#4355d9",
-        radicalColor: "#ee915e",
+        strokeColor: "#173e6b",
+        radicalColor: "#a7752d",
         outlineColor: "#cad3eb",
-        drawingColor: "#4355d9",
+        drawingColor: "#173e6b",
         showOutline: outline,
         showCharacter: false,
         strokeAnimationSpeed: 0.8,
@@ -128,6 +128,7 @@ export default function Glyphs({
               <button
                 key={c}
                 className={i === index ? "active" : ""}
+                aria-pressed={i === index}
                 onClick={() => setIndex(i)}
               >
                 {c}

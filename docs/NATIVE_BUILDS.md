@@ -12,7 +12,7 @@ Android: install JDK 21 and the Android SDK, then `npx cap sync android`. From `
 
 GitHub secrets `ANDROID_KEYSTORE_BASE64` and `ANDROID_KEYSTORE_PASSWORD` supply the official release key. The local owner backup lives outside the repository. Signing material must not appear in artifacts, logs or issue reports. The release workflow runs debug instrumentation tests against identical source/assets, checks release lint and validates the signed release APK. Desktop installer payloads are tested after packaging: Windows installs silently into a temporary directory, macOS mounts the DMG and copies the app, and Linux extracts and launches both the Debian and AppImage payloads. The workflow checks each installed app, not only the pre-installer directory. Windows/macOS publisher certificates and Apple notarization are not configured.
 
-Run `Native packages` manually to validate without publishing. Version tags from v1.1.0 invoke the same workflow and publish only after every required job succeeds. Update the version in root/desktop package files, Android `versionName`/`versionCode`, release notes and APK artifact filename together. Download checksums are generated after all packages are collected. Do not upload debug APKs as release downloads.
+Run `Native packages` manually to validate without publishing. Version tags from v1.1.0 invoke the same workflow and publish only after every required job succeeds. Update the version in root/desktop package files, Android `versionName`/`versionCode`, release notes together; the APK artifact filename now reads the package version automatically. Download checksums are generated after all packages are collected. Do not upload debug APKs as release downloads.
 
 ## Compatibility evidence
 
@@ -21,3 +21,5 @@ See [release compatibility](NATIVE_RELEASE.md) for targets and exclusions. Curre
 The web app remains the iPhone/iPad distribution. Creating an IPA requires a separate Apple Developer signing/provisioning setup; no simulator archive is presented as an installable iPhone release.
 
 Official Android release certificate SHA-256: `f31d3ad5f155ba8a7c76177bab1be58455a4e075ef51a13bef70c9e5fa7f975a`. This public fingerprint identifies the signing certificate; private signing material is never published.
+
+ESC 1.2.0 changes product names and icons while preserving installation identities and progress. Run `npm run check:release` after building to detect mismatched platform versions or metadata. Installer smoke tests use the new ESC executable display names.

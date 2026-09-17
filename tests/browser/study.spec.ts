@@ -65,12 +65,12 @@ test("practice and import/export work without sign-in", async ({ page }) => {
   });
   await expect(
     page.getByText(
-      "Invalid progress backup. Use an exported Chinese Studio JSON file.",
+      "Invalid progress backup. Use an exported ESC Chinese or Chinese Studio JSON file.",
     ),
   ).toBeVisible();
   const dl = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export progress" }).click();
-  expect((await dl).suggestedFilename()).toBe("chinese-studio-progress.json");
+  expect((await dl).suggestedFilename()).toBe("esc-chinese-progress.json");
   const valid = {
     known: {},
     wrong: {},

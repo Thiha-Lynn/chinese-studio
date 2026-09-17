@@ -34,6 +34,7 @@ import {
   Flame,
   Play,
   RefreshCw,
+  GraduationCap,
 } from "lucide-react";
 import type { Course, Lesson, Word, Progress, User } from "./types";
 import { freshProgress } from "./types";
@@ -43,6 +44,11 @@ import Practice from "./Practice";
 import Oral from "./Oral";
 import "./style.css";
 import Offline from "./Offline";
+import { brand } from "./brand";
+import ChoiceTabs from "./ChoiceTabs";
+import School from "./School";
+import AppUpdate from "./AppUpdate";
+import "./install";
 import {
   bundledApp,
   mobileApp,
@@ -75,7 +81,14 @@ function Link({
       className={className}
       {...rest}
       onClick={(e) => {
-        if (!e.metaKey && !e.ctrlKey) {
+        if (
+          !e.metaKey &&
+          !e.ctrlKey &&
+          !e.shiftKey &&
+          !e.altKey &&
+          e.button === 0 &&
+          rest.target !== "_blank"
+        ) {
           e.preventDefault();
           navigate(to);
         }
@@ -86,7 +99,8 @@ function Link({
   );
 }
 const nav = [
-  ["/learn", "My worlds", BookOpen],
+  ["/school", "Our school", GraduationCap],
+  ["/learn", "My learning", BookOpen],
   ["/vocabulary", "Vocabulary", Layers],
   ["/practice", "Practice", Play],
   ["/oral", "Oral test", Mic],
@@ -114,17 +128,60 @@ function App() {
     }),
     [immersive, setImmersive] = useState(() => {
       try {
-        return localStorage.getItem("studio-depth") !== "flat";
+        return localStorage.getItem("studio-depth") === "immersive";
       } catch {
         return false;
       }
     });
   const dialog = useRef<HTMLDialogElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const sidebar = useRef<HTMLElement>(null);
+  const [notice, setNotice] = useState("");
+  useEffect(() => {
+    const receive = (event: Event) =>
+      setNotice((event as CustomEvent<string>).detail);
+    window.addEventListener("esc-notice", receive);
+    return () => window.removeEventListener("esc-notice", receive);
+  }, []);
+  useEffect(() => {
+    if (!menu) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    sidebar.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    const key = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenu(false);
+        menuButton.current?.focus();
+      }
+      if (event.key !== "Tab") return;
+      const items = sidebar.current?.querySelectorAll<HTMLElement>(
+        "a[href], button:not(:disabled)",
+      );
+      if (!items?.length) return;
+      const first = items[0],
+        last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", key);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", key);
+    };
+  }, [menu]);
   useEffect(() => {
     const f = () => {
         setUrl(location.pathname);
         setMenu(false);
         window.scrollTo(0, 0);
+        requestAnimationFrame(() =>
+          document.getElementById("main")?.focus({ preventScroll: true }),
+        );
       },
       n = () => setOnline(navigator.onLine);
     window.addEventListener("popstate", f);
@@ -138,6 +195,9 @@ function App() {
   }, []);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "dark" ? "#0a172b" : "#102b50");
     document.documentElement.dataset.depth = immersive ? "immersive" : "flat";
     try {
       localStorage.setItem("studio-theme", theme);
@@ -168,12 +228,6 @@ function App() {
       .catch(() =>
         setSession({ user: null, authReady: false, aiReady: false }),
       );
-    if (!bundledApp && "serviceWorker" in navigator && import.meta.env.PROD)
-      navigator.serviceWorker
-        .register("/sw.js")
-        .catch(() =>
-          setError("Offline setup failed. Online lessons still work."),
-        );
   }, []);
   useEffect(() => {
     if (!ready) return;
@@ -194,8 +248,15 @@ function App() {
     document.title =
       (lesson
         ? `Lesson ${lesson.id} · ${lesson.title}`
-        : nav.find((n) => n[0] === url)?.[1] || "Chinese Studio") +
-      " · Learn Chinese";
+        : nav.find((n) => n[0] === url)?.[1] ||
+          {
+            "/offline": "Offline & install",
+            "/coverage": "Sources & coverage",
+            "/privacy": "Privacy",
+            "/terms": "About & credits",
+            "/course/1": "Chinese 1",
+          }[url] ||
+          "My learning") + " · ESC Chinese";
   }, [url, lesson]);
   const openResource = (s: string) => {
     if (!s.startsWith("/library/")) return;
@@ -211,8 +272,8 @@ function App() {
   if (!course)
     return (
       <main className="loading-screen">
-        <span className="brand-mark">中</span>
-        <h1>{error || "Opening your learning world…"}</h1>
+        <img className="brand-mark" src="/favicon.svg" alt="ESC" />
+        <h1>{error || "Welcome to ESC Chinese…"}</h1>
         {error && (
           <button className="btn" onClick={() => location.reload()}>
             Try again
@@ -223,6 +284,7 @@ function App() {
   const allowed = [
     "/",
     "/learn",
+    "/school",
     "/vocabulary",
     "/practice",
     "/oral",
@@ -240,19 +302,25 @@ function App() {
       <a href="#main" className="skip">
         Skip to content
       </a>
-      <aside className={"sidebar " + (menu ? "open" : "")}>
+      <aside
+        id="school-navigation"
+        ref={sidebar}
+        aria-label="School navigation"
+        className={"sidebar " + (menu ? "open" : "")}
+      >
         <Link to="/learn" className="brand">
-          <span className="brand-mark">中</span>
+          <img className="brand-mark" src="/favicon.svg" alt="ESC" />
           <span>
-            Chinese<span className="brand-light">Studio</span>
-            <small>A LITTLE PRACTICE. EVERY DAY.</small>
+            ESC <span className="brand-light">Chinese</span>
+            <small>LANGUAGE TRAINING CENTER</small>
+            <small lang="zh">汉语培训中心</small>
           </span>
         </Link>
         <div className="course-switch">
           <span className="course-dot">二</span>
           <div>
             <strong>Chinese 2</strong>
-            <small>10 lesson worlds</small>
+            <small>Your learning space</small>
           </div>
         </div>
         <nav aria-label="Main navigation">
@@ -260,7 +328,11 @@ function App() {
             <Link
               key={path}
               to={path}
-              aria-current={url === path ? "page" : undefined}
+              aria-current={
+                url === path || (path === "/learn" && (!!lesson || url === "/"))
+                  ? "page"
+                  : undefined
+              }
               className={
                 url === path || (path === "/learn" && (!!lesson || url === "/"))
                   ? "active"
@@ -271,12 +343,24 @@ function App() {
               {label}
             </Link>
           ))}
-          <Link to="/offline" className={url === "/offline" ? "active" : ""}>
+          <Link
+            to="/offline"
+            aria-current={url === "/offline" ? "page" : undefined}
+            className={url === "/offline" ? "active" : ""}
+          >
             <Download size={19} />
             Offline & install
           </Link>
         </nav>
         <div className="sidebar-bottom">
+          <a
+            className="subtle-link"
+            href={brand.facebook}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <GraduationCap size={16} /> ESC school updates ↗
+          </a>
           <Link to="/coverage" className="subtle-link">
             <ShieldCheck size={16} />
             Sources & coverage
@@ -331,6 +415,8 @@ function App() {
         <header className="topbar">
           <div className="row">
             <button
+              ref={menuButton}
+              aria-controls="school-navigation"
               className="icon-button mobile-menu"
               aria-label={menu ? "Close navigation" : "Open navigation"}
               aria-expanded={menu}
@@ -339,10 +425,18 @@ function App() {
               <Menu />
             </button>
             <span className="breadcrumb-label">
-              Chinese 2 <ChevronRight size={14} />
+              ESC <ChevronRight size={14} />
               {lesson
                 ? `Lesson ${lesson.id}`
-                : nav.find((n) => n[0] === url)?.[1] || "My studio"}
+                : nav.find((n) => n[0] === url)?.[1] ||
+                  {
+                    "/offline": "Offline & install",
+                    "/coverage": "Sources & coverage",
+                    "/privacy": "Privacy",
+                    "/terms": "About & credits",
+                    "/course/1": "Chinese 1",
+                  }[url] ||
+                  "My learning"}
             </span>
           </div>
           <div className="row">
@@ -355,6 +449,10 @@ function App() {
             </span>
             <button
               className="icon-button depth-control"
+              aria-pressed={immersive}
+              title={
+                immersive ? "Use calm flat visuals" : "Use immersive visuals"
+              }
               aria-label={
                 immersive ? "Use calm flat visuals" : "Use immersive visuals"
               }
@@ -365,6 +463,12 @@ function App() {
             <button
               className="icon-button"
               aria-label="Toggle color theme"
+              aria-pressed={theme === "dark"}
+              title={
+                theme === "dark"
+                  ? "Switch to light theme"
+                  : "Switch to dark theme"
+              }
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
               {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
@@ -372,6 +476,7 @@ function App() {
           </div>
         </header>
         <main id="main" className="main-content" tabIndex={-1}>
+          <AppUpdate />
           {!online && (
             <p className="soft-note" role="status">
               Offline · Your practice saves on this device. Downloaded resources
@@ -395,6 +500,7 @@ function App() {
               device.
             </p>
           )}
+          {url === "/school" && <School />}
           {(url === "/" || url === "/learn") && (
             <Home
               course={course}
@@ -522,7 +628,7 @@ function App() {
               <h1>
                 {url === "/privacy"
                   ? "Your learning, your privacy."
-                  : "About Chinese Studio"}
+                  : "About ESC Chinese"}
               </h1>
               {url === "/privacy" ? (
                 <>
@@ -557,9 +663,10 @@ function App() {
               ) : (
                 <>
                   <p>
-                    An independent learning companion, not the official MFU
-                    portal. This app does not submit assignments, attendance or
-                    grades to MFU.
+                    ESC Chinese Language Training Center’s practice platform.
+                    Included MFU materials retain their original attribution.
+                    This app does not submit assignments, attendance or grades
+                    to MFU.
                   </p>
                   <p>
                     Application code is MIT licensed. MFU materials and stroke
@@ -584,12 +691,12 @@ function App() {
           {!allowed.includes(url) && !lesson && (
             <Empty
               title="This page isn’t here."
-              text="Choose a lesson from My worlds."
+              text="Choose a lesson from My learning."
             />
           )}
         </main>
         <footer>
-          <span>Small steps. A little Chinese, every day.</span>
+          <span>© {new Date().getFullYear()} ESC Chinese · 学 · 练 · 用</span>
           <div>
             <Link to="/privacy">Privacy</Link>
             <Link to="/terms">About & credits</Link>
@@ -599,6 +706,18 @@ function App() {
           </div>
         </footer>
       </div>
+      {notice && (
+        <div className="app-notice" role="status">
+          <span>{notice}</span>
+          <button
+            className="icon-button"
+            aria-label="Dismiss notification"
+            onClick={() => setNotice("")}
+          >
+            <X size={18} />
+          </button>
+        </div>
+      )}
       <Tutor
         lesson={lesson?.id}
         activity={
@@ -610,6 +729,7 @@ function App() {
       />
       <dialog
         className="resource-dialog"
+        aria-label="Course resource viewer"
         ref={dialog}
         onCancel={() => setViewer("")}
       >
@@ -802,19 +922,21 @@ function Home({
         <span>
           你好, {name} <span className="wave">✦</span>
         </span>
-        <span>YOUR NEXT LITTLE ADVENTURE AWAITS</span>
+        <span>ESC CHINESE LANGUAGE TRAINING CENTER</span>
       </div>
       <section className="home-hero">
         <div className="hero-copy">
-          <span className="eyebrow">LEARN A LITTLE. GROW A LOT.</span>
+          <span className="eyebrow">
+            YOUR CHINESE JOURNEY STARTS HERE · 学无止境
+          </span>
           <h1>
-            A new world,
+            Learn Chinese.
             <br />
-            one word at a time.
+            Open a new chapter.
           </h1>
           <p>
-            Step into familiar places. Find new ways to practise.
-            <br className="desktop-only" /> Make Chinese part of your every day.
+            Your ESC learning space — lessons, speaking practice,
+            <br className="desktop-only" /> and a little progress every day.
           </p>
           <div className="row hero-actions">
             <Link to={`/lesson/${next.id}`} className="btn">
@@ -827,6 +949,9 @@ function Home({
         </div>
         <div className="hero-world">
           <span className="hero-ring" />
+          <span className="hero-school-name" aria-hidden="true">
+            ESC<small>汉语培训中心</small>
+          </span>
           <span className="hero-platform" />
           <img src={next.art} alt={next.theme} />
           <div className="world-label">
@@ -844,9 +969,9 @@ function Home({
           </span>
           <div>
             <strong>
-              10 <small>worlds</small>
+              {course.lessons.length} <small>lessons</small>
             </strong>
-            <span>Room to keep growing</span>
+            <span>Ready when you are</span>
           </div>
         </div>
         <div>
@@ -857,7 +982,7 @@ function Home({
             <strong>
               {learned} <small>/ {course.vocab.length} words</small>
             </strong>
-            <span>A little more familiar</span>
+            <span>Words you have learned</span>
           </div>
         </div>
         <div>
@@ -872,10 +997,18 @@ function Home({
           </div>
         </div>
       </div>
+      <div className="school-strip">
+        <span>
+          <strong>Learning with ESC</strong> · Online and on-campus classes
+        </span>
+        <Link to="/school">
+          Meet your school <ArrowRight size={16} />
+        </Link>
+      </div>
       <div className="section-heading">
         <div>
           <span className="eyebrow">CHOOSE YOUR NEXT CHAPTER</span>
-          <h2>Your lesson worlds</h2>
+          <h2>Your Chinese 2 lessons</h2>
         </div>
         <span className="muted">Chinese 2 · Lessons 1–10</span>
       </div>
@@ -959,9 +1092,10 @@ function WordCard({
         className={"mini-flip " + (flipped ? "turned" : "")}
         onClick={() => setFlipped(!flipped)}
         aria-label={`Flip ${word.hanzi}`}
+        aria-pressed={flipped}
       >
         <div className="mini-flip-inner">
-          <div className="mini-front">
+          <div className="mini-front" aria-hidden={flipped}>
             {word.image ? (
               <img
                 loading="lazy"
@@ -976,7 +1110,7 @@ function WordCard({
             </strong>
             <span className="pinyin">{word.pinyin}</span>
           </div>
-          <div className="mini-back">
+          <div className="mini-back" aria-hidden={!flipped}>
             <strong className="hanzi" lang="zh">
               {word.hanzi}
             </strong>
@@ -1038,6 +1172,10 @@ function Vocabulary({
         .toLowerCase()
         .includes(q.toLowerCase()),
   );
+  const lastPage = Math.max(0, Math.ceil(filtered.length / 12) - 1);
+  useEffect(() => {
+    if (page > lastPage) setPage(lastPage);
+  }, [page, lastPage]);
   return (
     <>
       {!lessonOnly && (
@@ -1152,7 +1290,7 @@ function LessonView({
   return (
     <>
       <Link to="/learn" className="text-button">
-        ← Back to my worlds
+        ← Back to my learning
       </Link>
       <section className="lesson-hero">
         <div>
@@ -1176,29 +1314,24 @@ function LessonView({
           <img src={l.art} alt={l.theme} />
         </div>
       </section>
-      <div className="tabs">
-        {[
+      <ChoiceTabs
+        label="Lesson sections"
+        value={tab}
+        onChange={setTab}
+        options={[
           ["start", "Start"],
           ["words", "Vocabulary"],
           ["notes", "Lesson notes"],
           ["practice", "Practice & test"],
           ["assignments", "Assignments"],
           ["resources", "Resources"],
-        ].map(([k, t]) => (
-          <button
-            key={k}
-            className={tab === k ? "active" : ""}
-            onClick={() => setTab(k)}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
+        ]}
+      />
       {tab === "start" && (
         <>
           <div className="lesson-start">
             <section className="panel">
-              <span className="eyebrow">YOUR WAY THROUGH THIS WORLD</span>
+              <span className="eyebrow">YOUR LESSON PLAN</span>
               <h2>First, get familiar.</h2>
               <p>
                 Meet the words, explore the original lesson, then make a little
@@ -1480,7 +1613,7 @@ function Resources({
     <>
       <div className="page-heading">
         <span className="eyebrow">ALL YOUR MATERIAL, TOGETHER</span>
-        <h1>Your little library.</h1>
+        <h1>Your learning library.</h1>
         <p>
           Original slides, worksheets and oral preparation. Read here or take a
           copy with you.
@@ -1551,7 +1684,7 @@ function ProgressView({
         new Blob([JSON.stringify(progress, null, 2)], {
           type: "application/json",
         }),
-        "chinese-studio-progress.json",
+        "esc-chinese-progress.json",
       );
     } catch {
       setMessage(
@@ -1568,7 +1701,7 @@ function ProgressView({
       setMessage("Progress restored.");
     } catch (e) {
       setMessage(
-        "Invalid progress backup. Use an exported Chinese Studio JSON file.",
+        "Invalid progress backup. Use an exported ESC Chinese or Chinese Studio JSON file.",
       );
     }
   }
@@ -1596,7 +1729,7 @@ function ProgressView({
         ))}
       </div>
       <section className="panel">
-        <h2>A world-by-world view</h2>
+        <h2>Your progress by lesson</h2>
         {Array.from({ length: 10 }, (_, i) => {
           const pool = words.filter((w) => w.lesson === i + 1),
             known = pool.filter((w) => progress.known[w.id]).length;
@@ -1635,7 +1768,10 @@ function ProgressView({
       </section>
       <section className="panel">
         <h2>Your progress belongs to you.</h2>
-        <p>Download a backup or restore a previous Chinese Studio export.</p>
+        <p>
+          Download a backup or restore an ESC Chinese or earlier Chinese Studio
+          export.
+        </p>
         <div className="row">
           <button className="btn secondary" onClick={download}>
             <Download size={17} /> Export progress
@@ -1646,7 +1782,10 @@ function ProgressView({
               type="file"
               accept="application/json"
               className="sr-only"
-              onChange={(e) => restore(e.target.files?.[0])}
+              onChange={(e) => {
+                void restore(e.target.files?.[0]);
+                e.target.value = "";
+              }}
             />
           </label>
         </div>
@@ -1700,7 +1839,7 @@ function Empty({ title, text }: { title: string; text: string }) {
       <h1>{title}</h1>
       <p>{text}</p>
       <Link to="/learn" className="btn">
-        Back to my worlds
+        Back to my learning
       </Link>
     </section>
   );

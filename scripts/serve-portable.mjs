@@ -118,6 +118,6 @@ const server = http.createServer(async (req, res) => {
 });
 server.listen(Number(process.env.PORT || 4173), "127.0.0.1", () =>
   console.log(
-    `Chinese Studio: http://127.0.0.1:${server.address().port}/learn\nKeep this window open while studying. Press Ctrl+C to stop.`,
+    `ESC Chinese: http://127.0.0.1:${server.address().port}/learn\nKeep this window open while studying. Press Ctrl+C to stop.`,
   ),
 );

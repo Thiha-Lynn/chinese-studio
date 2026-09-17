@@ -90,3 +90,8 @@ self.addEventListener("fetch", (event) => {
     })(),
   );
 });
+
+// Activate only after the learner chooses Update ESC; do not interrupt study.
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "ACTIVATE_UPDATE") self.skipWaiting();
+});

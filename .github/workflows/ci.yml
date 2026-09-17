@@ -17,6 +17,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - run: npm run check:release
       - if: runner.os == 'Linux'
         run: npx playwright install --with-deps chromium firefox webkit
       - if: runner.os == 'Linux'
