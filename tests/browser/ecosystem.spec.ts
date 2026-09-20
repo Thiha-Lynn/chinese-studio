@@ -1,4 +1,8 @@
 import { test, expect, type Page } from "@playwright/test";
+import { readFileSync } from "node:fs";
+const { version } = JSON.parse(
+  readFileSync(new URL("../../package.json", import.meta.url), "utf8"),
+);
 
 async function go(page: Page, path: string) {
   await page.goto(path);
@@ -239,7 +243,7 @@ test("installer catalog and mobile keyboard navigation", async ({
     await expect(link).toHaveCount(1);
     await expect(link).toHaveAttribute(
       "href",
-      /\/v1\.2\.3\/esc-chinese-1\.2\.3-/,
+      `https://github.com/Thiha-Lynn/chinese-studio/releases/download/v${version}/esc-chinese-${version}-${suffix}`,
     );
   }
   if (info.project.name.includes("mobile")) {

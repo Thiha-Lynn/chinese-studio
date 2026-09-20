@@ -48,6 +48,7 @@ import { brand } from "./brand";
 import ChoiceTabs from "./ChoiceTabs";
 import School from "./School";
 import AppUpdate from "./AppUpdate";
+import WordArtwork from "./WordArtwork";
 import "./install";
 import {
   bundledApp,
@@ -1096,19 +1097,7 @@ function WordCard({
       >
         <div className="mini-flip-inner">
           <div className="mini-front" aria-hidden={flipped}>
-            {word.image ? (
-              <img
-                loading="lazy"
-                src={word.image}
-                alt="Vocabulary illustration"
-              />
-            ) : (
-              <span className="type-art">{word.hanzi}</span>
-            )}
-            <strong lang="zh" className="hanzi">
-              {word.hanzi}
-            </strong>
-            <span className="pinyin">{word.pinyin}</span>
+            <WordArtwork word={word} />
           </div>
           <div className="mini-back" aria-hidden={!flipped}>
             <strong className="hanzi" lang="zh">
@@ -1230,8 +1219,8 @@ function Vocabulary({
         </label>
       </div>
       <p className="muted">
-        {filtered.length} words · Original artwork where captured; classroom
-        vocabulary is labelled in the source report.
+        {filtered.length} words · Illustrated and character cards. Tap a card to
+        reveal its meaning.
       </p>
       <div className="vocab-grid">
         {filtered.slice(page * 12, page * 12 + 12).map((w) => (

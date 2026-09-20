@@ -1,8 +1,10 @@
-# ESC Chinese 1.2.3
+# ESC Chinese 1.2.4
+
+Vocabulary visual repair: full-width flip controls, bounded original artwork, navy-and-gold character cards for words without illustrations, and a readable fallback when an image is unavailable. Long Chinese words and pinyin wrap inside the cards. The same fix applies to practice flashcards.
 
 ESC school branding, consistent navigation and controls, a school information page, accessible lesson selectors, improved phone layouts and a complete platform download center. Offline installation handles early browser prompts and unavailable storage; speech failures are explained instead of silently ignored. All original course content and rights notices remain in place.
 
-ESC Chinese 1.2.3 packages the same public study interface with all ten Chinese 2 lessons, 249 vocabulary entries, lesson text, handwriting guides and the available course documents. Installed desktop and Android packages work on the first launch without an internet connection. No Node.js installation or account is needed for these native packages.
+ESC Chinese 1.2.4 packages the same public study interface with all ten Chinese 2 lessons, 249 vocabulary entries, lesson text, handwriting guides and the available course documents. Installed desktop and Android packages work on the first launch without an internet connection. No Node.js installation or account is needed for these native packages.
 
 | Device                     | Download                                                  | Compatibility target                                                    |
 | -------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
@@ -22,12 +24,12 @@ Windows and macOS downloads are not publisher-signed/notarized; their operating 
 
 Native apps store their own progress locally. Export/import transfers progress between installations. Account backup and AI services belong to the live website and require online configuration. Updating the app preserves its storage; uninstalling or clearing app data may erase it. Export before changing installations. Native app updates are downloaded manually from this release page; there is no silent updater.
 
-The release workflow gates publication on web tests, packaged desktop smoke tests on each listed processor architecture, Android lint/build/signature verification, and offline Android 15/16 emulator tests. Tests cover lesson navigation, bundled resources, handwriting data, responsive layout, exports on desktop, and progress persistence. Emulator/runner coverage is not physical-device certification. All gates passed for version 1.2.3 at commit `61e3ee58bdf4fadd2a8882f89943d51112632b95`: [native release results](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686557) and [Windows/macOS/Linux source verification](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686571). The browser suite passed all 44 checks. Public download sizes and GitHub SHA-256 digests were checked against the release checksum manifest.
+The release workflow gates publication on web tests, packaged desktop smoke tests on each listed processor architecture, Android lint/build/signature verification, and offline Android 15/16 emulator tests. Tests cover lesson navigation, bundled resources, handwriting data, responsive layout, exports on desktop, and progress persistence. Emulator/runner coverage is not physical-device certification. Version 1.2.4 adds visual regression checks across every vocabulary card, simulated image failures, and decoding of every referenced lesson/vocabulary image. Publication is gated on the full web and native workflow.
 
 Every download has a SHA-256 entry in `SHA256SUMS`. Code is MIT; the existing course-content and stroke-data notices remain in effect. Source, contribution instructions, and build documentation are in the repository.
 
 ## Updating from Chinese Studio
 
-The application display name is now **ESC Chinese**. Package filenames start with `esc-chinese-1.2.3-`. Android keeps `live.ztvmm.chinese` and the existing release key. Desktop retains its application ID, local origin and historical data directory; Linux keeps the executable/package identity. Browser progress keys and JSON backup structure are unchanged. Export progress before changing installations. The website and the apps use separate device storage.
+The application display name is now **ESC Chinese**. Package filenames start with `esc-chinese-1.2.4-`. Android keeps `live.ztvmm.chinese` and the existing release key. Desktop retains its application ID, local origin and historical data directory; Linux keeps the executable/package identity. Browser progress keys and JSON backup structure are unchanged. Export progress before changing installations. The website and the apps use separate device storage.
 
 A previously cached web installation can keep showing Chinese Studio while the new version waits for open sessions to close. Close all tabs and installed-app windows for this site, then reopen online after the update downloads. Do not clear site data to change the branding: that also removes local progress. ESC versions show an **Update ESC** action when a later web release is ready.

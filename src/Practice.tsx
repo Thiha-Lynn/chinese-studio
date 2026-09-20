@@ -11,6 +11,7 @@ import {
   RefreshCw,
   CheckCircle2,
 } from "lucide-react";
+import WordArtwork from "./WordArtwork";
 import type { Course, Progress, Word } from "./types";
 import { award, normalizePinyin, review, shuffle, speak } from "./lib";
 const modes = [
@@ -262,12 +263,7 @@ export default function Practice({
           >
             <span className="flip-inner">
               <span className="flip-front" aria-hidden={flipped}>
-                {word.image && (
-                  <img src={word.image} alt="Vocabulary illustration" />
-                )}
-                <strong lang="zh" className="hanzi">
-                  {word.hanzi}
-                </strong>
+                <WordArtwork word={word} showPinyin={false} />
                 <small>Tap to turn it over ↻</small>
               </span>
               <span className="flip-back" aria-hidden={!flipped}>
