@@ -111,19 +111,20 @@ test.describe("network image failure", () => {
   });
 });
 
-test("every referenced lesson and vocabulary image decodes", async ({
+test("every packaged image including summary sheets and icons decodes", async ({
   page,
 }) => {
   await page.goto("/learn");
-  const course = await (await page.request.get("/course.json")).json();
+  const manifest = await (
+    await page.request.get("/offline-manifest.json")
+  ).json();
   const urls = [
-    ...new Set<string>(
-      [
-        ...course.vocab.map((w: any) => w.image),
-        ...course.lessons.map((l: any) => l.art),
-      ].filter(Boolean),
-    ),
-  ];
+    ...new Set<string>([
+      ...manifest.core,
+      ...manifest.files.map((file: { url: string }) => file.url),
+    ]),
+  ].filter((url) => /\.(png|webp|svg|jpe?g)$/i.test(url));
+  expect(urls.length).toBeGreaterThan(150);
   const failed = await page.evaluate(async (paths) => {
     const bad: string[] = [];
     for (let start = 0; start < paths.length; start += 10) {
