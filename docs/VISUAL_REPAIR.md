@@ -18,3 +18,11 @@ The school's navy, gold, serif lettering and Chinese identity suggest a composed
 Twelve new checks (three per browser configuration) cover all 249 card bounds, flip visibility and keyboard operation, missing-image behavior in vocabulary and practice, and browser decoding of all 164 packaged images, including summary sheets and icons. The configurations are desktop Chromium, mobile Chromium, Firefox and mobile WebKit. Light/dark screenshots cover the character cards.
 
 The complete browser suite passed all 56 checks locally, along with TypeScript, production build, release metadata checks and five unit tests. The expanded image-decoding check also passed in all four browser configurations. The native release pipeline packages the shared implementation for Android, macOS, Windows and Linux, then verifies the installed apps and offline resources before publishing. Platform compatibility and signing limitations remain in [NATIVE_RELEASE.md](NATIVE_RELEASE.md).
+
+## Published release and deployment
+
+[Version 1.2.4](https://github.com/Thiha-Lynn/chinese-studio/releases/tag/v1.2.4) is published from application commit `6128ddb382d54429e5882d244e5ef9a948c7b595`. [Every release gate passed](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35483955232): 56 hosted browser checks; all six desktop installer jobs; Android lint, release signing and bundled-file verification; Android 15/16 offline tests; portable packaging. The [tagged source build matrix](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35483955284) also passed.
+
+All ten public downloads and SHA256SUMS returned HTTP 200 with correct sizes; GitHub SHA-256 asset digests matched the checksum manifest. The live site was switched to the verified 1.2.4 build, with all 551 deployed web-file hashes checked and the 1.2.3 release retained for rollback. The existing production account database was unchanged.
+
+Public HTTPS health, course data, lesson routes, JavaScript, CSS and service-worker hashes passed after deployment. The existing browser's **Update ESC** button applied the update without clearing storage. Live lesson 1 illustrations and both flip states were verified; lesson 9 displayed the new character artwork for the words in the reported screenshot. Temporary test browsers and the local preview server were closed.

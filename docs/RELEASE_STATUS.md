@@ -1,19 +1,21 @@
-# ESC release status · 1.2.3
+# ESC release status · 1.2.4
 
-ESC Chinese 1.2.3 is published and live at https://chinese.ztvmm.live. The release source is commit `61e3ee58bdf4fadd2a8882f89943d51112632b95`; later documentation-only commits record the verification results.
+ESC Chinese 1.2.4 is published and live at https://chinese.ztvmm.live. The release source is commit `6128ddb382d54429e5882d244e5ef9a948c7b595`; later commits expand image-test coverage and record verification results without changing the shipped application code.
 
-- [Download apps and checksums](https://github.com/Thiha-Lynn/chinese-studio/releases/tag/v1.2.3)
-- [Native release validation](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686557): all jobs passed.
-- [Source build matrix](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35221686571): all jobs passed.
-- [Detailed section audit and deployment evidence](ESC_UPGRADE.md)
+- [Download apps and checksums](https://github.com/Thiha-Lynn/chinese-studio/releases/tag/v1.2.4)
+- [Native release validation](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35483955232): all jobs passed.
+- [Source build matrix](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35483955284): all jobs passed.
+- [Visual repair audit and deployment evidence](VISUAL_REPAIR.md)
 
 ## Included and verified
+
+Version 1.2.4 repairs vocabulary button layouts across all 249 words, adds ESC character cards for the 110 words without original illustrations, and handles unavailable images in vocabulary and practice. All 164 packaged image files were checked against production and decoded in all four browser configurations.
 
 Navy-and-gold ESC identity across the website, PWA, Android and desktop apps; school information and Facebook links; consistent selected, expanded and disabled controls; keyboard/mobile navigation, theme and layout improvements; progress compatibility and a complete platform download center.
 
 Ten Chinese 2 lessons, 485 slide-text pages, 249 vocabulary entries, 333 stroke guides and 529 offline resources retain their source attribution. The native apps include the available library for first-launch offline study.
 
-All 44 browser checks and five unit checks passed. Desktop packages were installed/extracted and launched on Windows, macOS and Linux on both x64 and ARM64. Signed Android APK installation and offline study passed on Android 15 and 16 emulators. The portable ZIP and all ten public downloads were verified; release asset digests match SHA256SUMS. The live deployment's 551 web files match the local release build.
+All 56 browser checks and five unit checks passed. Desktop packages were installed/extracted and launched on Windows, macOS and Linux on both x64 and ARM64. Signed Android APK installation and offline study passed on Android 15 and 16 emulators. The portable ZIP and all ten public downloads were verified; release asset digests match SHA256SUMS. The live deployment's 551 web files match the local release build.
 
 ## Platform support and limits
 
