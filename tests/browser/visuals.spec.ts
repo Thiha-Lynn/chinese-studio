@@ -115,8 +115,10 @@ test.describe("network image failure", () => {
 
 test("every packaged image including summary sheets and icons decodes", async ({
   page,
+  baseURL,
 }) => {
-  await page.goto("/learn", { waitUntil: "domcontentloaded" });
+  // Asset decoding does not need a SPA navigation or service-worker lifecycle.
+  await page.setContent("<!doctype html><html><body></body></html>");
   const manifest = await (
     await page.request.get("/offline-manifest.json")
   ).json();
@@ -127,13 +129,13 @@ test("every packaged image including summary sheets and icons decodes", async ({
     ]),
   ].filter((url) => /\.(png|webp|svg|jpe?g)$/i.test(url));
   expect(urls.length).toBeGreaterThan(150);
-  const failed = await page.evaluate(async (paths) => {
+  const failed = await page.evaluate(async ({ paths, origin }) => {
     const bad: string[] = [];
     for (let start = 0; start < paths.length; start += 10) {
       await Promise.all(
         paths.slice(start, start + 10).map(async (src) => {
           const image = new Image();
-          image.src = src;
+          image.src = new URL(src, origin).href;
           try {
             await image.decode();
             if (!image.naturalWidth) bad.push(src);
@@ -144,6 +146,6 @@ test("every packaged image including summary sheets and icons decodes", async ({
       );
     }
     return bad;
-  }, urls);
+  }, { paths: urls, origin: baseURL! });
   expect(failed).toEqual([]);
 });
