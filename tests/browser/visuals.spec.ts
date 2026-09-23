@@ -3,7 +3,9 @@ import { test, expect } from "@playwright/test";
 test("all 249 vocabulary cards have bounded artwork and full-width flip controls", async ({
   page,
 }, info) => {
-  await page.goto("/vocabulary");
+  // Assert the actual SPA content below; Firefox's load event can remain
+  // pending after a large offline-cache test even when the reader is ready.
+  await page.goto("/vocabulary", { waitUntil: "domcontentloaded" });
   await expect(page.locator(".vocab-card").first()).toBeVisible();
   let count = 0;
   do {
