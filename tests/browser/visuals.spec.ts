@@ -89,7 +89,7 @@ test.describe("network image failure", () => {
     await page.route("**/library/assets/L1_VOCAB*", (route) =>
       route.fulfill({ status: 404, body: "Not found" }),
     );
-    await page.goto("/lesson/1");
+    await page.goto("/lesson/1", { waitUntil: "domcontentloaded" });
     await page
       .getByRole("group", { name: "Lesson sections" })
       .getByRole("button", { name: "Vocabulary", exact: true })
@@ -101,7 +101,7 @@ test.describe("network image failure", () => {
     await expect(first.locator(".character-art-text")).toHaveText("但是");
     await first.getByRole("button", { name: "Flip 但是", exact: true }).click();
     await expect(first.locator(".mini-back")).toContainText("but");
-    await page.goto("/practice");
+    await page.goto("/practice", { waitUntil: "domcontentloaded" });
     await page.getByLabel("Today’s lesson").selectOption("1");
     await page.getByRole("button", { name: /Flip & remember/ }).click();
     await page.locator(".flip-card").scrollIntoViewIfNeeded();
@@ -116,7 +116,7 @@ test.describe("network image failure", () => {
 test("every packaged image including summary sheets and icons decodes", async ({
   page,
 }) => {
-  await page.goto("/learn");
+  await page.goto("/learn", { waitUntil: "domcontentloaded" });
   const manifest = await (
     await page.request.get("/offline-manifest.json")
   ).json();

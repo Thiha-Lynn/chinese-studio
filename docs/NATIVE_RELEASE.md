@@ -1,8 +1,8 @@
 # ESC Chinese 1.3.0
 
-Chinese 1 joins the learning ecosystem: ten MDL lessons, 1,152 source pages, 182 vocabulary cards, 582 activity question records, original audio and 30 videos. Seven archived Classroom originals are included. Three missing MDL records and 49 unavailable Classroom files are explicitly documented in Coverage.
+Chinese 1 joins the learning ecosystem: ten MDL lessons, 1,152 source pages, 182 vocabulary cards, 582 activity question records, original audio and 30 videos. Seven archived Classroom originals are included. Three missing MDL records, one unavailable audio file and 49 unavailable Classroom files are explicitly documented in Coverage.
 
-Search, English/Chinese/pinyin/Thai reading, local source-based answer checking, independent drills, handwriting, source downloads and existing progress backups work together. Browser offline downloads make large videos optional. Desktop, Android and portable packages include the full recovered library. Existing Chinese 2 lessons and all app identities remain intact. See [archive notes](chinese1-archive.md).
+Search, English/Chinese/pinyin/Thai reading, local source-based answer checking, independent drills, handwriting, source downloads and existing progress backups work together. Browser offline downloads make large videos optional. Desktop, Android and portable packages include the full recovered library. Existing Chinese 2 lessons and all app identities remain intact. See [archive notes](https://github.com/Thiha-Lynn/chinese-studio/blob/main/docs/chinese1-archive.md).
 
 | Device                     | Download                                                  | Compatibility target                                                    |
 | -------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
@@ -15,6 +15,8 @@ Search, English/Chinese/pinyin/Thai reading, local source-based answer checking,
 | Android phone/tablet       | `android.apk`                                             | Android 7+, with Android System WebView/Chrome 107+                     |
 | iPhone/iPad                | [Install the web app](https://chinese.ztvmm.live/offline) | Safari 16+; Share → Add to Home Screen, then download lessons           |
 | Other desktop environments | `portable.zip`                                            | A compatible browser and Node.js 24–26                                  |
+
+Full offline downloads are approximately 1.6–1.7 GB because they include the recovered videos and documents. Allow additional free storage for installation and extraction. Browser users can download the smaller study pack and add videos separately.
 
 Choose the file matching your processor. Windows EXEs are installers, DMGs contain the Mac app (drag it into Applications), and Linux provides both AppImage and Debian packages. APKs include ARM and Intel Android support through the device WebView. Android offers the system share sheet for exports and course documents; install a PDF/Office reader to open those documents. Chinese 1 source cards use original recordings. Synthesized practice speech requires an installed device voice. Microphone access is requested only when recording.
 
