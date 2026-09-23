@@ -7,7 +7,7 @@ Captured 23 September 2026 from MFU MDL Chinese 1 and the authorized archived Cl
 - All 10 MDL lessons, their chapter menus, pre/post-test collections and linked story/activity graph: 1,249 records and 1,152 templates.
 - 182 vocabulary cards, with source spelling, pinyin, translations, artwork and recordings.
 - 582 activity question records. Multiple choice and sentence ordering use the supplied source keys; phonetic soundboards and collectible cards are ungraded. This is independent study, with no grade submission or MDL unlock-state synchronization.
-- All 1,214 media references resolved and downloaded, including 30 original videos. Path aliases can refer to the same physical file. The media manifest records original URL, local filename, byte count and SHA-256.
+- 1,215 of 1,216 media references recovered, including 30 original videos. A final audit found a trailing-space audio path (recovered after trimming) and a mistyped `shuai.mpp3` path (source 404, explicitly recorded). Path aliases can refer to the same physical file. The media manifest records original URL, local filename, byte count and SHA-256.
 - Seven Classroom originals recovered: two oral-test PDFs, two oral-test posters, two quiz posters and a final-project poster.
 - All 49 remaining classwork links were opened in the signed-in university profile. Google returned 404; a lecture file was also checked through the standard file viewer, which explicitly said the file does not exist. Original filenames and lesson mappings are unknown, so the inventory uses attachment numbers, not inferred lesson numbers.
 - Three linked MDL records return 404: `CTA01-183`, `LKA01-21`, `LKT04-9`. These remain visible gaps.
@@ -34,7 +34,7 @@ npm test
 npm run build
 ```
 
-Fresh Git checkouts restore the 1.3 GB original-media archive from the checksum-pinned asset release specified in `content/chinese1-media-archive.json`. Each physical file is then verified against its source manifest. Media binaries are kept out of Git history, but are bundled into every build.
+Fresh Git checkouts restore the 1.3 GB original-media archive from the checksum-pinned asset release specified in `content/chinese1-media-archive.json`. The archive contains 1,204 files; one additional 82 KB recording recovered during the final audit is checked into Git. Each physical file is then verified against its source manifest. Media binaries are kept out of Git history, but are bundled into every build.
 
 The local capture directory contains `capture.py`, `download_media.py`, `classroom_inventory.py`, raw source records, downloaded originals and manifests. The importer requires no credentials and does not access a network. It copies or hardlinks local artifacts into the application library and regenerates the normalized Chinese 1 dataset. Browser-downloaded Classroom files are imported by `classroom_inventory.py`; missing originals can be supplied later and the manifest updated before rerunning the importer.
 

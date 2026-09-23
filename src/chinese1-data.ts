@@ -49,6 +49,7 @@ export type Chinese1Data = {
   nodes: Record<string, SourceNode>;
   vocab: (Word & { code: string; audio?: string })[];
   media: Record<string, string>;
+  mediaGaps: { source: string; error: string }[];
   classroom: {
     source: string;
     resources: {

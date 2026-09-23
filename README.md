@@ -55,7 +55,7 @@ The [release downloads](https://github.com/Thiha-Lynn/chinese-studio/releases) i
 
 ## ESC 1.3.0 Chinese 1 archive
 
-Ten Chinese 1 MDL lessons, 1,152 pages, 582 activity questions, 182 vocabulary cards, 1,204 original media files and seven recovered Classroom originals join the existing Chinese 2 library. Search, multilingual reading, source-based practice, handwriting, optional browser video downloads and progress backups are integrated. Source gaps are explicitly listed. Fresh builds restore a checksum-pinned 1.28 GB media archive automatically; allow enough disk space for builds and native packages.
+Ten Chinese 1 MDL lessons, 1,152 pages, 582 activity questions, 182 vocabulary cards, 1,205 original media files and seven recovered Classroom originals join the existing Chinese 2 library. Search, multilingual reading, source-based practice, handwriting, optional browser video downloads and progress backups are integrated. Source gaps are explicitly listed. Fresh builds restore a checksum-pinned 1.28 GB media archive automatically; allow enough disk space for builds and native packages.
 
 ## ESC 1.2.4 visual repair
 

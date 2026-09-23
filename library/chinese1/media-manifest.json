@@ -3752,6 +3752,14 @@
     "sha256": "93434125d5aa064dca286566bd4fb2aa0958a130bccb2cc5f8df0fdd3283f36f"
   },
   {
+    "source": "/chinese/Sound/Items/chapter1/c1-1-item3.mp3 ",
+    "url": "https://mdl.mfu.ac.th/chinese/Sound/Items/chapter1/c1-1-item3.mp3",
+    "file": "f4c8e1b4ee92f7b9a1cbfd47.mp3",
+    "status": "downloaded",
+    "bytes": 82272,
+    "sha256": "5035d3350c244c77b376609406e09a8892afda86b923483a06bb027d080a4c4d"
+  },
+  {
     "source": "/chinese/Sound/Items/chapter10/c1-10-item1.mp3",
     "url": "https://mdl.mfu.ac.th/chinese/Sound/Items/chapter10/c1-10-item1.mp3",
     "file": "840dcf9a065b33f7e7ee081c.mp3",
@@ -6334,6 +6342,13 @@
     "status": "downloaded",
     "bytes": 146592,
     "sha256": "4379cc311f564f8f8085204aa9eecbe2f9444df9892587f52750e2a03b0c1175"
+  },
+  {
+    "source": "/chinese/Sound/Phonetics/Chinese1%20Sound/Phonetics%20Chapter%202/shuai.mpp3",
+    "url": "https://mdl.mfu.ac.th/chinese/Sound/Phonetics/Chinese1%20Sound/Phonetics%20Chapter%202/shuai.mpp3",
+    "file": "911d56490134b15d8d6e7e5c.mpp3",
+    "status": "failed",
+    "error": "HTTP Error 404: Not Found"
   },
   {
     "source": "/chinese/Sound/Phonetics/Chinese1%20Sound/Phonetics%20Chapter%202/shuan.mp3",

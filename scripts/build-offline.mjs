@@ -1,5 +1,7 @@
 import {
   cpSync,
+  linkSync,
+  constants,
   readFileSync,
   writeFileSync,
   mkdirSync,
@@ -17,7 +19,23 @@ cpSync(
   "native/ANDROID_NOTICES.txt",
   path.join(root, "NATIVE_SOFTWARE_NOTICES.txt"),
 );
-cpSync("library", path.join(root, "library"), { recursive: true });
+// Reuse immutable library assets without duplicating gigabytes per local build.
+function linkLibrary(source, destination) {
+  mkdirSync(destination, { recursive: true });
+  for (const entry of readdirSync(source, { withFileTypes: true })) {
+    const from = path.join(source, entry.name),
+      to = path.join(destination, entry.name);
+    if (entry.isDirectory()) linkLibrary(from, to);
+    else {
+      try {
+        linkSync(from, to);
+      } catch {
+        cpSync(from, to, { mode: constants.COPYFILE_FICLONE });
+      }
+    }
+  }
+}
+linkLibrary("library", path.join(root, "library"));
 const course = JSON.parse(readFileSync("content/course.json", "utf8"));
 const characters = new Set(
   [...course.vocab, ...chinese1.vocab].flatMap(

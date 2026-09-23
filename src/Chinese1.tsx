@@ -112,7 +112,9 @@ function Item({
 }) {
   const item = value.item || value;
   if (!item.data || item.comment === "Max Score") return null;
-  return /\.(mp3|wav|mp4|webm|png|jpg|jpeg|gif)(?:\?|$)/i.test(item.data) ? (
+  return /\.(mp3|wav|mp4|webm|png|jpg|jpeg|gif)(?:\?|$)/i.test(
+    item.data.trim(),
+  ) || /^(?:\/)?chinese\//.test(item.data) ? (
     <Media key={item.data} source={item.data} ctx={ctx} label={label} />
   ) : (
     <p className="c1-source-text">{item.data}</p>
@@ -963,6 +965,13 @@ export default function Chinese1({
               {data.stats.mediaFailed} referenced media files were not
               downloaded. Unavailable media are labeled on their source pages.
             </p>
+            {data.mediaGaps.map((g) => (
+              <p key={g.source}>
+                <small>
+                  {g.source}: {g.error}
+                </small>
+              </p>
+            ))}
             <details>
               <summary>
                 Classroom attachments awaiting originals (

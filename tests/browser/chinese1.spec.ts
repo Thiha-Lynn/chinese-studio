@@ -34,7 +34,7 @@ test("Chinese 1 search, original activity scoring, persistence and independent p
   await page.getByRole("button", { name: "Resources", exact: true }).click();
   await expect(page.locator(".c1-resource-list .panel")).toHaveCount(7);
   await page.getByRole("button", { name: "Coverage", exact: true }).click();
-  await expect(page.getByText(/1214 of 1214/)).toBeVisible();
+  await expect(page.getByText(/1215 of 1216/)).toBeVisible();
   expect(errors).toEqual([]);
 });
 test("Chinese 1 source sentence order and multilingual story fit the screen", async ({
