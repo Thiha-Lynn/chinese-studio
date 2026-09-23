@@ -3,6 +3,7 @@ set -euo pipefail
 if adb shell pm path live.ztvmm.chinese | grep -q "^package:"; then
   adb uninstall live.ztvmm.chinese
 fi
+adb shell df -h /data
 adb install android/app/build/outputs/apk/release/app-release.apk
 adb shell svc wifi disable
 adb shell svc data disable
@@ -12,10 +13,11 @@ for attempt in {1..15}; do
   if adb shell uiautomator dump /sdcard/studio-window.xml >/dev/null &&
      adb pull /sdcard/studio-window.xml android/app/build/reports/release-smoke/window.xml >/dev/null; then
   if python3 -c "from pathlib import Path; s=Path('android/app/build/reports/release-smoke/window.xml').read_text(); assert 'Continue learning' in s and 'Chinese 2' in s"; then
-    adb shell screencap -p /sdcard/studio-release.png
-    adb pull /sdcard/studio-release.png android/app/build/reports/release-smoke/release.png
+    if adb shell screencap -p /sdcard/studio-release.png &&
+       adb pull /sdcard/studio-release.png android/app/build/reports/release-smoke/release.png; then
     echo 'PASS: signed release APK launches its lesson interface with Wi-Fi and mobile data disabled'
     exit 0
+    fi
   fi
   fi
   sleep 2
