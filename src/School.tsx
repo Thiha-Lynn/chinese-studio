@@ -57,7 +57,7 @@ export default function School() {
           [
             BookOpen,
             "Practice between classes",
-            "Use the included ten-lesson Chinese 2 library for vocabulary, listening, speaking and handwriting practice.",
+            "Use the included Chinese 1 and Chinese 2 libraries for vocabulary, listening, speaking and handwriting practice.",
           ],
         ].map(([Icon, title, detail]) => {
           const Symbol = Icon as typeof BookOpen;

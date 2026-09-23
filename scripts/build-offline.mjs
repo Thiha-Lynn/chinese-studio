@@ -11,11 +11,18 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 const root = path.resolve("build/client");
 cpSync("content/course.json", path.join(root, "course.json"));
-cpSync("native/ANDROID_NOTICES.txt", path.join(root, "NATIVE_SOFTWARE_NOTICES.txt"));
+cpSync("content/chinese1.json", path.join(root, "chinese1.json"));
+const chinese1 = JSON.parse(readFileSync("content/chinese1.json", "utf8"));
+cpSync(
+  "native/ANDROID_NOTICES.txt",
+  path.join(root, "NATIVE_SOFTWARE_NOTICES.txt"),
+);
 cpSync("library", path.join(root, "library"), { recursive: true });
 const course = JSON.parse(readFileSync("content/course.json", "utf8"));
 const characters = new Set(
-  course.vocab.flatMap((w) => w.hanzi.match(/[\u3400-\u9fff]/g) || []),
+  [...course.vocab, ...chinese1.vocab].flatMap(
+    (w) => w.hanzi.match(/[\u3400-\u9fff]/g) || [],
+  ),
 );
 mkdirSync(path.join(root, "library/glyphs"), { recursive: true });
 let missing = [];
@@ -72,8 +79,13 @@ const core = files
 const manifest = {
   version,
   core,
+  videos: files
+    .filter((f) => /\.(mp4|webm)$/i.test(f.url))
+    .map(({ url, bytes }) => ({ url, bytes })),
   files: files
-    .filter((f) => f.url.startsWith("/library/"))
+    .filter(
+      (f) => f.url.startsWith("/library/") && !/\.(mp4|webm)$/i.test(f.url),
+    )
     .map(({ url, bytes }) => ({ url, bytes })),
 };
 writeFileSync(

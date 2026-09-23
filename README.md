@@ -9,7 +9,7 @@ ESC’s Chinese learning platform, with a navy-and-gold school identity, public 
 - Chinese 2: ten classroom lessons, 485 extracted slide pages, 249 vocabulary entries (139 captured MDL cards for Lessons 1–5 and 110 classroom entries for Lessons 6–10).
 - All ten original PowerPoint decks and twenty writing/homework worksheets. Lessons 1–5 also include deck PDF conversions. Lessons 6–10 have the original PowerPoint downloads and in-app slide text.
 - Oral Test 1: 30 reading items, 14 question families, 43 question variations and self-rated 15-point rehearsal.
-- Chinese 1 is pending an authorized account/export. MDL audio, video, story sequences and assessed activity banks are not fully archived. Independent drills do not submit grades or assignments to MFU.
+- Chinese 1 now has all ten MDL lesson graphs, original media, searchable multilingual content, vocabulary, local activities and seven recovered Classroom attachments. See [Chinese 1 archive notes](docs/chinese1-archive.md) for source gaps and rebuild instructions. Independent practice does not submit grades or assignments to MFU.
 
 ## Use on any device
 
@@ -53,7 +53,11 @@ Application code and original contributions: **MIT**. Original MFU course conten
 
 The [release downloads](https://github.com/Thiha-Lynn/chinese-studio/releases) include native Windows installers, macOS disk images, Linux AppImage/Debian packages and a release-signed Android APK from v1.1.0 onward. All included lessons ship inside each app. See [supported platforms and installation notes](docs/NATIVE_RELEASE.md) and [native build instructions](docs/NATIVE_BUILDS.md). iPhone/iPad use the installable web app. Windows/macOS publisher signing and an iOS IPA are not included.
 
-## ESC 1.2.4
+## ESC 1.3.0 Chinese 1 archive
+
+Ten Chinese 1 MDL lessons, 1,152 pages, 582 activity questions, 182 vocabulary cards, 1,204 original media files and seven recovered Classroom originals join the existing Chinese 2 library. Search, multilingual reading, source-based practice, handwriting, optional browser video downloads and progress backups are integrated. Source gaps are explicitly listed. Fresh builds restore a checksum-pinned 1.28 GB media archive automatically; allow enough disk space for builds and native packages.
+
+## ESC 1.2.4 visual repair
 
 Vocabulary cards now have reliable full-width layouts, bounded original illustrations and ESC character artwork when an image is absent or unavailable. The shared repair also covers practice flashcards. All 249 vocabulary entries are covered by visual regression checks; see the [visual audit](docs/VISUAL_REPAIR.md).
 

@@ -59,6 +59,7 @@ import {
 } from "./native";
 installMobileDownloads();
 import { parseProgress } from "./progress";
+const Chinese1 = lazy(() => import("./Chinese1"));
 const Glyphs = lazy(() => import("./Glyphs"));
 function navigate(url: string) {
   history.pushState({}, "", url);
@@ -318,9 +319,9 @@ function App() {
           </span>
         </Link>
         <div className="course-switch">
-          <span className="course-dot">二</span>
+          <span className="course-dot">学</span>
           <div>
-            <strong>Chinese 2</strong>
+            <strong>Chinese 1 & 2</strong>
             <small>Your learning space</small>
           </div>
         </div>
@@ -368,7 +369,7 @@ function App() {
           </Link>
           <Link to="/course/1" className="subtle-link">
             <BookOpen size={16} />
-            Chinese 1 <span className="tiny-tag">SOON</span>
+            Chinese 1 <span className="tiny-tag">NEW</span>
           </Link>
           <a
             href="https://github.com/Thiha-Lynn/chinese-studio"
@@ -619,10 +620,9 @@ function App() {
             </>
           )}
           {url === "/course/1" && (
-            <Empty
-              title="Chinese 1 is next."
-              text="Waiting for the authorized Chinese 1 account or course export. Chinese 2 is available now."
-            />
+            <Suspense fallback={<p role="status">Loading Chinese 1…</p>}>
+              <Chinese1 progress={progress} setProgress={setProgress} />
+            </Suspense>
           )}
           {(url === "/privacy" || url === "/terms") && (
             <section className="panel legal">
@@ -677,10 +677,11 @@ function App() {
                     contributions.
                   </p>
                   <p>
-                    All ten Chinese 2 classroom lessons are included. Chinese 1
-                    and parts of the MDL media/activity collection are pending.
-                    Online AI and Google services require operator configuration
-                    and an internet connection.
+                    All ten Chinese 2 classroom lessons and the Chinese 1 MDL
+                    study archive are included. Chinese 1 Coverage records
+                    unavailable classroom originals and source gaps. Online AI
+                    and Google services require operator configuration and an
+                    internet connection.
                   </p>
                 </>
               )}
@@ -720,11 +721,14 @@ function App() {
         </div>
       )}
       <Tutor
+        courseNumber={url === "/course/1" ? 1 : 2}
         lesson={lesson?.id}
         activity={
-          lesson
-            ? "Lesson study"
-            : nav.find((n) => n[0] === url)?.[1] || "Study"
+          url === "/course/1"
+            ? "Chinese 1 source study"
+            : lesson
+              ? "Lesson study"
+              : nav.find((n) => n[0] === url)?.[1] || "Study"
         }
         available={!!session?.aiReady && !!session?.user && online}
       />
@@ -912,7 +916,7 @@ function Home({
   progress: Progress;
   name: string;
 }) {
-  const learned = Object.values(progress.known).filter(Boolean).length;
+  const learned = course.vocab.filter((w) => progress.known[w.id]).length;
   const next =
     course.lessons.find((l) =>
       course.vocab.some((w) => w.lesson === l.id && !progress.known[w.id]),
