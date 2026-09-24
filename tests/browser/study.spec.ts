@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import path from "node:path";
 import { test, expect } from "@playwright/test";
 async function go(page: any, path: string) {
-  await page.goto(path);
+  await page.goto(path, { waitUntil: "commit" });
   await expect(page.locator("#main")).toBeVisible();
 }
 test("public lessons, theme, navigation and mobile layout", async ({
@@ -46,7 +46,7 @@ test("practice and import/export work without sign-in", async ({ page }) => {
   await page.getByLabel("Search vocabulary").fill("篮球");
   const learn = page.getByRole("button", { name: /Mark .* learned/ }).first();
   await learn.click();
-  await page.reload();
+  await page.reload({ waitUntil: "commit" });
   await expect(
     page.getByRole("button", { name: /Mark .* for review/ }).first(),
   ).toBeVisible();
@@ -87,7 +87,7 @@ test("practice and import/export work without sign-in", async ({ page }) => {
     buffer: Buffer.from(JSON.stringify(valid)),
   });
   await expect(page.getByText("Progress restored.")).toBeVisible();
-  await page.reload();
+  await page.reload({ waitUntil: "commit" });
   await expect(
     page.locator(".progress-stats").getByText("42", { exact: true }),
   ).toBeVisible();

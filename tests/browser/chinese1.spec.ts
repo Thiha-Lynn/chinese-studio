@@ -4,7 +4,7 @@ test("Chinese 1 search, original activity scoring, persistence and independent p
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/course/1");
+  await page.goto("/course/1", { waitUntil: "commit" });
   await expect(
     page.getByRole("button", { name: "Explore lesson →" }),
   ).toHaveCount(10);
@@ -19,7 +19,7 @@ test("Chinese 1 search, original activity scoring, persistence and independent p
     page.getByText("Correct according to the archived source key."),
   ).toBeVisible();
   await page.getByRole("checkbox", { name: "Mark this page studied" }).check();
-  await page.reload();
+  await page.reload({ waitUntil: "commit" });
   await expect(
     page.getByRole("checkbox", { name: "Mark this page studied" }),
   ).toBeChecked();
@@ -40,14 +40,14 @@ test("Chinese 1 search, original activity scoring, persistence and independent p
 test("Chinese 1 source sentence order and multilingual story fit the screen", async ({
   page,
 }) => {
-  await page.goto("/course/1?page=IAM08-1");
+  await page.goto("/course/1?page=IAM08-1", { waitUntil: "commit" });
   for (const name of ["B 她", "A 是", "C 谁", "D ？"])
     await page.getByRole("checkbox", { name, exact: true }).check();
   await page.getByRole("button", { name: "Check answer", exact: true }).click();
   await expect(
     page.getByText("Correct according to the archived source key."),
   ).toBeVisible();
-  await page.goto("/course/1?page=CTT02-1");
+  await page.goto("/course/1?page=CTT02-1", { waitUntil: "commit" });
   await page.getByLabel("Source language").selectOption("TH");
   await expect(
     page.getByText("ที่นี่ที่ไหนกัน", { exact: true }),
@@ -60,14 +60,14 @@ test("Chinese 1 source sentence order and multilingual story fit the screen", as
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await page.goto("/course/1?page=CTA01-183");
+  await page.goto("/course/1?page=CTA01-183", { waitUntil: "commit" });
   await expect(
     page.getByRole("heading", { name: "Source page unavailable" }),
   ).toBeVisible();
 });
 
 test("Chinese 1 video uses a full-width playable source", async ({ page }) => {
-  await page.goto("/course/1?page=CTV01-1");
+  await page.goto("/course/1?page=CTV01-1", { waitUntil: "commit" });
   const video = page.locator(".c1-reader video");
   await expect(video).toBeVisible();
   await video.evaluate((el: HTMLVideoElement) => {
