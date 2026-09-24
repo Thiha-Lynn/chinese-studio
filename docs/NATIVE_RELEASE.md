@@ -1,6 +1,6 @@
 # ESC Chinese 1.3.1
 
-Chinese 1 is now prominent in the main navigation and the learning home page, with direct links to every lesson alongside Chinese 2. The learning ecosystem includes: ten MDL lessons, 1,152 source pages, 182 vocabulary cards, 582 activity question records, original audio and 30 videos. Seven archived Classroom originals are included. Three missing MDL records, one unavailable audio file and 49 unavailable Classroom files are explicitly documented in Coverage.
+Chinese 1 is now prominent in the main navigation and the learning home page, with direct links to every lesson alongside Chinese 2. Source practice also accepts every supplied alternative answer, including flexible sentence order and single-choice alternatives. The learning ecosystem includes: ten MDL lessons, 1,152 source pages, 182 vocabulary cards, 582 activity question records, original audio and 30 videos. Seven archived Classroom originals are included. Three missing MDL records, one unavailable audio file and 49 unavailable Classroom files are explicitly documented in Coverage.
 
 Search, English/Chinese/pinyin/Thai reading, local source-based answer checking, independent drills, handwriting, source downloads and existing progress backups work together. Browser offline downloads make large videos optional. Desktop, Android and portable packages include the full recovered library. Existing Chinese 2 lessons and all app identities remain intact. See [archive notes](https://github.com/Thiha-Lynn/chinese-studio/blob/main/docs/chinese1-archive.md).
 

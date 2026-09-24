@@ -20,7 +20,8 @@ import {
   nodeTitle,
   choicesFor,
   selectionCorrect,
-  normalizedAnswer,
+  sentenceAnswers,
+  sentenceCorrect,
 } from "./chinese1-data";
 import Practice from "./Practice";
 import { review } from "./lib";
@@ -158,18 +159,14 @@ function Question({
   const [selected, setSelected] = useState<number[]>([]),
     [checked, setChecked] = useState(false),
     [typed, setTyped] = useState("");
-  const expected =
-    node.answers?.correctAnswers?.find((a) => a.score > 0)?.answer ||
-    (ordered ? q.item.find((i) => (i.score || 0) > 0)?.item?.data || "" : "");
+  const expected = ordered ? sentenceAnswers(node, q) : [];
   const entered = ordered
     ? selected
         .map((i) => choices[i]?.item?.data || choices[i]?.data || "")
         .join("")
     : typed;
   const correct = ordered
-    ? expected
-      ? normalizedAnswer(entered) === normalizedAnswer(expected)
-      : null
+    ? sentenceCorrect(expected, entered)
     : selectionCorrect(q, selected);
   const key = `c1:${node.code}:q${index}`;
   function check() {
@@ -322,10 +319,14 @@ function Question({
             : correct
               ? "Correct according to the archived source key."
               : "Not yet. Review the choices and try again."}
-          {ordered && expected && (
+          {ordered && expected.length > 0 && (
             <details>
-              <summary>Show source answer</summary>
-              <p lang="zh">{expected}</p>
+              <summary>Show accepted source answers</summary>
+              {expected.map((answer) => (
+                <p lang="zh" key={answer}>
+                  {answer}
+                </p>
+              ))}
             </details>
           )}
         </div>

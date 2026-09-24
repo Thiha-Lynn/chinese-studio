@@ -5,6 +5,8 @@ import {
   choicesFor,
   selectionCorrect,
   normalizedAnswer,
+  sentenceAnswers,
+  sentenceCorrect,
 } from "../src/chinese1-data.ts";
 import { parseProgress } from "../src/progress.ts";
 import { freshProgress } from "../src/types.ts";
@@ -79,6 +81,28 @@ test("original activity keys and Chinese 1 progress work independently of Chines
   assert.equal(
     normalizedAnswer("她 是 谁？"),
     normalizedAnswer(data.nodes["IAM08-1"].answers.correctAnswers[0].answer),
+  );
+  for (const code of ["IAM08-29", "IAM08-32", "IAM08-36", "IAM08-37"]) {
+    const node = data.nodes[code],
+      question = node.templates[0].content.question[0];
+    const answers = sentenceAnswers(node, question);
+    assert.equal(answers.length, 2);
+    for (const answer of answers)
+      assert.equal(sentenceCorrect(answers, answer), true);
+    assert.equal(sentenceCorrect(answers, "不正确"), false);
+  }
+  const alternatives = data.nodes["IAM05-286"].templates[0].content.question[0];
+  assert.equal(selectionCorrect(alternatives, [0]), true);
+  assert.equal(selectionCorrect(alternatives, [2]), true);
+  assert.equal(selectionCorrect(alternatives, [1]), false);
+  assert.equal(selectionCorrect(alternatives, [0, 2]), false);
+  assert.equal(
+    selectionCorrect({ ...alternatives, multiSelect: true }, [0, 2]),
+    true,
+  );
+  assert.equal(
+    selectionCorrect({ ...alternatives, multiSelect: true }, [0]),
+    false,
   );
   const ids = data.vocab.map((w: any) => w.id);
   assert.equal(new Set(ids).size, 182);

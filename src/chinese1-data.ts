@@ -102,8 +102,30 @@ export function selectionCorrect(
     (c.score || 0) > 0 ? [i] : [],
   );
   if (!expected.length) return null;
+  if (!q.multiSelect)
+    return selected.length === 1 && expected.includes(selected[0]);
   return (
     expected.length === selected.length &&
     expected.every((i) => selected.includes(i))
   );
+}
+
+export function sentenceAnswers(node: SourceNode, q: SourceQuestion): string[] {
+  const source =
+    node.answers?.correctAnswers
+      ?.filter((a) => a.score > 0 && a.answer.trim())
+      .map((a) => a.answer) || [];
+  return source.length
+    ? source
+    : q.item
+        .filter((i) => (i.score || 0) > 0 && i.item?.data)
+        .map((i) => i.item!.data!);
+}
+export function sentenceCorrect(
+  answers: string[],
+  entered: string,
+): boolean | null {
+  return answers.length
+    ? answers.some((a) => normalizedAnswer(a) === normalizedAnswer(entered))
+    : null;
 }

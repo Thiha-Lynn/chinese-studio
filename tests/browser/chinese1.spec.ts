@@ -113,3 +113,25 @@ test("learning home exposes all ten Chinese 1 lessons beside Chinese 2", async (
     ),
   ).toBe(true);
 });
+
+test("Chinese 1 accepts alternative source answers without requiring two radio choices", async ({
+  page,
+}) => {
+  await page.goto("/course/1?page=IAM08-36", { waitUntil: "commit" });
+  for (const name of ["D 今天", "E 你", "C 去", "A 哪儿", "B ?"])
+    await page.getByRole("checkbox", { name, exact: true }).check();
+  await page.getByRole("button", { name: "Check answer", exact: true }).click();
+  await expect(
+    page.getByText("Correct according to the archived source key."),
+  ).toBeVisible();
+  await page.goto("/course/1?page=IAM05-286", { waitUntil: "commit" });
+  for (const name of ["A nà", "C nàr"]) {
+    await page.getByRole("radio", { name, exact: true }).check();
+    await page
+      .getByRole("button", { name: "Check answer", exact: true })
+      .click();
+    await expect(
+      page.getByText("Correct according to the archived source key."),
+    ).toBeVisible();
+  }
+});
