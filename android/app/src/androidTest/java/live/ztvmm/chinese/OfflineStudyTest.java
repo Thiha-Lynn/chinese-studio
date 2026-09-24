@@ -26,7 +26,7 @@ public class OfflineStudyTest {
     }
     @Test public void bundledLessonsWorkOfflineAndPersist() throws Exception {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            waitFor(scenario, "document.querySelectorAll('.world-card').length === 10");
+            waitFor(scenario, "document.querySelectorAll('.world-card').length === 20");
             assertEquals("true", js(scenario, "document.documentElement.scrollWidth <= innerWidth"));
             js(scenario, "window.__check='pending'; Promise.all([fetch('/course.json').then(r=>r.json()),fetch('/course.json').then(r=>r.json()).then(c=>fetch('/library/glyphs/'+encodeURIComponent([...c.vocab[0].hanzi][0])+'.json')).then(r=>r.json()),fetch('/library/resources/Lesson%201.pdf').then(r=>r.arrayBuffer())]).then(([c,g,p])=>window.__check=(c.lessons.length===10 && c.vocab.length===249 && g.strokes.length>0 && p.byteLength>1000 && new TextDecoder().decode(p.slice(0,5))==='%PDF-')?'ok':'bad').catch(e=>window.__check=String(e));");
             waitFor(scenario, "window.__check !== 'pending'");
@@ -34,7 +34,11 @@ public class OfflineStudyTest {
             js(scenario, "window.__check='pending'; fetch('/chinese1.json').then(r=>r.json()).then(async c=>{const a=await fetch(c.vocab.find(w=>w.audio).audio);window.__check=c.lessons.length===10&&c.vocab.length===182&&c.stats.mediaDownloaded===1215&&a.ok&&(await a.arrayBuffer()).byteLength>100?'ok':'bad';}).catch(e=>window.__check=String(e));");
             waitFor(scenario, "window.__check !== 'pending'");
             assertEquals("Chinese 1 original assets", "\"ok\"", js(scenario, "window.__check"));
-            js(scenario, "document.querySelectorAll('.world-card')[9].click()");
+            js(scenario, "Array.from(document.querySelectorAll('.world-card')).find(a=>a.getAttribute('href')==='/course/1?page=HP02-1').click()");
+            waitFor(scenario, "document.body.innerText.includes('Chapter 1 Master An an')");
+            js(scenario, "history.pushState({},'', '/learn'); dispatchEvent(new PopStateEvent('popstate'))");
+            waitFor(scenario, "document.querySelectorAll('.world-card').length === 20");
+            js(scenario, "Array.from(document.querySelectorAll('.world-card')).find(a=>a.getAttribute('href')==='/lesson/10').click()");
             waitFor(scenario, "document.body.innerText.includes('Flying to Thailand')");
             js(scenario, "Array.from(document.querySelectorAll('button')).find(b=>b.textContent.trim()==='Lesson notes').click()");
             waitFor(scenario, "document.querySelector('.slide-reader pre')?.textContent.includes('Lesson 10') === true");
@@ -47,7 +51,7 @@ public class OfflineStudyTest {
             assertEquals("true", js(scenario, "document.documentElement.scrollWidth <= innerWidth"));
         }
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
-            waitFor(scenario, "document.querySelectorAll('.world-card').length === 10");
+            waitFor(scenario, "document.querySelectorAll('.world-card').length === 20");
             assertEquals("true", js(scenario, "Object.values(JSON.parse(localStorage.getItem('studio-device-progress')).known).includes(true)"));
         }
     }
