@@ -1,0 +1,85 @@
+name: Publish validated packages
+on:
+  workflow_dispatch:
+    inputs:
+      desktop_run:
+        description: Run with six successful desktop jobs
+        required: true
+      web_run:
+        description: Run with successful web and portable checks
+        required: true
+      android_run:
+        description: Run with successful signed Android and offline checks
+        required: true
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify completed jobs and identical application source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DESKTOP_RUN: ${{ inputs.desktop_run }}
+          WEB_RUN: ${{ inputs.web_run }}
+          ANDROID_RUN: ${{ inputs.android_run }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          def api(path):
+              return json.loads(subprocess.check_output(['gh', 'api', 'repos/'+os.environ['GITHUB_REPOSITORY']+path]))
+          for kind in ['DESKTOP', 'WEB', 'ANDROID']:
+              run_id = os.environ[kind+'_RUN']
+              assert run_id.isdecimal()
+              run = api('/actions/runs/'+run_id)
+              assert run['status'] == 'completed', (kind, 'run still active')
+              assert run['path'] == '.github/workflows/native.yml'
+              jobs = api('/actions/runs/'+run_id+'/jobs?per_page=100')['jobs']
+              selected = [j for j in jobs if j['name'].startswith('desktop (')] if kind == 'DESKTOP' else [j for j in jobs if j['name'] == kind.lower()]
+              assert len(selected) == (6 if kind == 'DESKTOP' else 1)
+              assert all(j['conclusion'] == 'success' for j in selected), [(j['name'],j['conclusion']) for j in selected]
+              subprocess.run(['git','diff','--exit-code',run['head_sha'],os.environ['GITHUB_SHA'],'--','.',':(exclude).github/**',':(exclude)docs/**',':(exclude)tests/**',':(exclude)scripts/test-android-release.sh'],check=True)
+              print(kind, run_id, run['head_sha'], 'validated; application source identical')
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ inputs.desktop_run }}
+          github-token: ${{ github.token }}
+          pattern: installer-*
+          path: release
+          merge-multiple: true
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ inputs.web_run }}
+          github-token: ${{ github.token }}
+          name: portable
+          path: release
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ inputs.android_run }}
+          github-token: ${{ github.token }}
+          name: android
+          path: release
+      - name: Publish installers and checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for file in release/*-linux-x86_64.AppImage; do
+            [ ! -f "$file" ] || mv "$file" "${file/-linux-x86_64./-linux-x64.}"
+          done
+          for file in release/*-linux-amd64.deb; do
+            [ ! -f "$file" ] || mv "$file" "${file/-linux-amd64./-linux-x64.}"
+          done
+          test "$(find release -type f | wc -l)" -eq 10
+          (cd release && sha256sum *.exe *.dmg *.AppImage *.deb *.apk *.zip > SHA256SUMS)
+          RELEASE_TAG="v$(node -p "require('./package.json').version")"
+          if ! gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release create "$RELEASE_TAG" --target "$GITHUB_SHA" --draft --title "ESC Chinese ${RELEASE_TAG#v}" --notes-file docs/NATIVE_RELEASE.md
+          fi
+          gh release upload "$RELEASE_TAG" release/* --clobber
+          gh release edit "$RELEASE_TAG" --notes-file docs/NATIVE_RELEASE.md --draft=false --latest

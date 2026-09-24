@@ -3,11 +3,13 @@ import { X, Send, Sparkles, MessageCircle } from "lucide-react";
 import { api } from "./lib";
 export default function Tutor({
   lesson,
+  courseNumber = 2,
   activity,
   focus,
   available,
 }: {
   available: boolean;
+  courseNumber?: 1 | 2;
   lesson?: number;
   activity: string;
   focus?: string;
@@ -53,7 +55,17 @@ export default function Tutor({
     try {
       const d = await api("/api/tutor", {
         method: "POST",
-        body: JSON.stringify({ lesson, activity, focus, messages: next }),
+        body: JSON.stringify({
+          lesson,
+          courseNumber,
+          pageCode:
+            courseNumber === 1
+              ? new URLSearchParams(location.search).get("page") || undefined
+              : undefined,
+          activity,
+          focus,
+          messages: next,
+        }),
       });
       setMessages([...next, { role: "assistant", content: d.answer }]);
     } catch (e) {

@@ -126,7 +126,7 @@ test("complete pack loads lessons, lazy handwriting and resources offline", asyn
     await page.evaluate(() => navigator.serviceWorker.ready);
     await page.getByRole("button", { name: "Download all lessons" }).click();
     await expect(
-      page.getByText("All study materials are saved for offline use."),
+      page.getByText("Selected study materials are saved for offline use."),
     ).toBeVisible({ timeout: 150000 });
     await new Promise<void>((resolve) => {
       server.once("exit", () => resolve());
@@ -155,6 +155,18 @@ test("complete pack loads lessons, lazy handwriting and resources offline", asyn
     await offlineGo("/practice");
     await page.getByRole("button", { name: /Flip & remember/ }).click();
     await expect(page.getByRole("button", { name: /Got it/ })).toBeVisible();
+    await offlineGo("/course/1?page=IAM05-1");
+    await expect(
+      page.getByText("Match the sound with the correct initials."),
+    ).toBeVisible();
+    const audioPath = await page
+      .locator(".c1-question audio")
+      .getAttribute("src");
+    const audio = await page.evaluate(async (url) => {
+      const r = await fetch(url!, { headers: { Range: "bytes=0-99" } });
+      return { status: r.status, bytes: (await r.arrayBuffer()).byteLength };
+    }, audioPath);
+    expect(audio).toEqual({ status: 206, bytes: 100 });
     await context.setOffline(false);
   } finally {
     if (server.exitCode === null) server.kill();

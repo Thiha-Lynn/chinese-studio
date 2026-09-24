@@ -18,10 +18,10 @@ const options = {
 };
 let app;
 const watchdog = setTimeout(() => {
-  console.error("Native smoke test exceeded 120 seconds");
+  console.error("Native smoke test exceeded 180 seconds");
   app?.process().kill("SIGKILL");
   process.exit(1);
-}, 120000);
+}, 180000);
 try {
   app = await electron.launch(options);
   const page = await app.firstWindow();
@@ -42,14 +42,32 @@ try {
   ).toBeEnabled();
   const resources = await page.evaluate(async () => {
     const manifest = await (await fetch("/offline-manifest.json")).json();
-    for (const file of manifest.files) {
+    for (const file of [...manifest.files, ...(manifest.videos || [])]) {
       const r = await fetch(file.url);
       if (!r.ok || (await r.arrayBuffer()).byteLength !== file.bytes)
         throw Error("Missing resource: " + file.url);
     }
-    return manifest.files.length;
+    return manifest.files.length + (manifest.videos || []).length;
   });
   expect(resources).toBeGreaterThan(500);
+  await page.goto("studio://app/course/1?page=IAM05-1");
+  await expect(
+    page.getByRole("radio", { name: "C m", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("radio", { name: "C m", exact: true }).check();
+  await page.getByRole("button", { name: "Check answer", exact: true }).click();
+  await expect(
+    page.getByText("Correct according to the archived source key."),
+  ).toBeVisible();
+  await page.goto("studio://app/course/1?page=CTV01-1");
+  const originalVideo = page.locator(".c1-reader video");
+  await originalVideo.evaluate((v) => {
+    v.preload = "metadata";
+    v.load();
+  });
+  await expect
+    .poll(() => originalVideo.evaluate((v) => v.readyState))
+    .toBeGreaterThan(0);
   await page.goto("studio://app/vocabulary");
   await page.getByLabel("Search vocabulary").fill("篮球");
   await page

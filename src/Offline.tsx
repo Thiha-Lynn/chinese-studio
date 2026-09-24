@@ -6,15 +6,20 @@ import { Download, ArrowUpRight, CheckCircle2 } from "lucide-react";
 type Pack = {
   version: string;
   core: string[];
+  videos?: { url: string; bytes: number }[];
   files: { url: string; bytes: number }[];
 };
 export default function Offline() {
+  const [includeVideos, setIncludeVideos] = useState(false);
   const [status, setStatus] = useState(""),
     [busy, setBusy] = useState(false),
     [pack, setPack] = useState<Pack | null>(null),
     [installed, setInstalled] = useState(false),
     [count, setCount] = useState(0),
     [install, setInstall] = useState(getInstallPrompt);
+  const selectedFiles = pack
+    ? [...pack.files, ...(includeVideos ? pack.videos || [] : [])]
+    : [];
   useEffect(() => {
     fetch("/offline-manifest.json")
       .then((r) => {
@@ -36,8 +41,9 @@ export default function Offline() {
       .then(async (c) => {
         const keys = await c.keys();
         setInstalled(
-          pack.files.every((f) =>
-            keys.some((k) => k.url === new URL(f.url, location.origin).href),
+          [...pack.files, ...(includeVideos ? pack.videos || [] : [])].every(
+            (f) =>
+              keys.some((k) => k.url === new URL(f.url, location.origin).href),
           ),
         );
       })
@@ -46,7 +52,7 @@ export default function Offline() {
           "Browser storage is unavailable. Try a regular browser window or download an app below.",
         ),
       );
-  }, [pack]);
+  }, [pack, includeVideos]);
   async function download() {
     if (!pack || busy) return;
     setBusy(true);
@@ -60,14 +66,14 @@ export default function Offline() {
       }
       const cache = await caches.open("chinese-pack-" + pack.version);
       let complete = 0;
-      for (let i = 0; i < pack.files.length; i += 4) {
+      for (let i = 0; i < selectedFiles.length; i += 4) {
         await Promise.all(
-          pack.files.slice(i, i + 4).map(async (f) => {
+          selectedFiles.slice(i, i + 4).map(async (f) => {
             if (!(await cache.match(f.url))) {
               const r = await fetch(f.url);
               if (!r.ok)
                 throw Error(
-                  "A resource could not be downloaded. Please retry.",
+                  `Could not download ${f.url} (HTTP ${r.status}).`,
                 );
               await cache.put(f.url, r);
             }
@@ -84,10 +90,10 @@ export default function Offline() {
           await caches.delete(name);
       }
       setInstalled(true);
-      setStatus("All study materials are saved for offline use.");
+      setStatus("Selected study materials are saved for offline use.");
     } catch (e) {
       setStatus(
-        "Download incomplete. Check your connection and available device storage, then retry. Already saved files will be reused.",
+        `Download incomplete. ${e instanceof Error ? e.message : "Check your connection and available device storage."} Retry to reuse saved files.`,
       );
     } finally {
       setBusy(false);
@@ -124,14 +130,27 @@ export default function Offline() {
             {bundledApp ? "Ready for offline study" : "Save for offline study"}
           </h2>
           <p>
-            Save all ten lessons, vocabulary artwork, stroke guides and
-            downloadable course files on this device.
+            Save Chinese 1 and Chinese 2 lessons, original audio, vocabulary
+            artwork, stroke guides and downloadable course files on this device.
           </p>
           <p>
             {pack
-              ? `${Math.ceil(pack.files.reduce((n, f) => n + f.bytes, 0) / 1e6)} MB · ${pack.files.length} files`
+              ? `${Math.ceil(selectedFiles.reduce((n, f) => n + f.bytes, 0) / 1e6)} MB · ${selectedFiles.length} files`
               : "Checking download size…"}
           </p>
+          {!bundledApp && !!pack?.videos?.length && (
+            <label>
+              <input
+                type="checkbox"
+                checked={includeVideos}
+                disabled={busy}
+                onChange={(e) => setIncludeVideos(e.target.checked)}
+              />{" "}
+              Include {pack.videos.length} original videos (
+              {Math.ceil(pack.videos.reduce((n, f) => n + f.bytes, 0) / 1e6)} MB
+              extra)
+            </label>
+          )}
           {!bundledApp && (
             <button
               className="btn"
@@ -154,7 +173,7 @@ export default function Offline() {
             <progress
               aria-label="Offline download progress"
               value={count}
-              max={pack?.files.length}
+              max={selectedFiles.length}
             />
           )}
           <p role="status">
@@ -162,7 +181,7 @@ export default function Offline() {
               ? "All lessons, vocabulary, stroke guides and course documents are included with this app. No download is needed."
               : status ||
                 (installed
-                  ? "All resources are saved on this device."
+                  ? "Selected resources are saved on this device."
                   : "The app and lesson text save automatically after your first online visit.")}{" "}
           </p>
           {installed && (

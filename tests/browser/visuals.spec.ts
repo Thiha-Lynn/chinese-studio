@@ -3,7 +3,9 @@ import { test, expect } from "@playwright/test";
 test("all 249 vocabulary cards have bounded artwork and full-width flip controls", async ({
   page,
 }, info) => {
-  await page.goto("/vocabulary");
+  // Assert the actual SPA content below; Firefox's load event can remain
+  // pending after a large offline-cache test even when the reader is ready.
+  await page.goto("/vocabulary", { waitUntil: "commit" });
   await expect(page.locator(".vocab-card").first()).toBeVisible();
   let count = 0;
   do {
@@ -87,7 +89,7 @@ test.describe("network image failure", () => {
     await page.route("**/library/assets/L1_VOCAB*", (route) =>
       route.fulfill({ status: 404, body: "Not found" }),
     );
-    await page.goto("/lesson/1");
+    await page.goto("/lesson/1", { waitUntil: "commit" });
     await page
       .getByRole("group", { name: "Lesson sections" })
       .getByRole("button", { name: "Vocabulary", exact: true })
@@ -99,7 +101,7 @@ test.describe("network image failure", () => {
     await expect(first.locator(".character-art-text")).toHaveText("但是");
     await first.getByRole("button", { name: "Flip 但是", exact: true }).click();
     await expect(first.locator(".mini-back")).toContainText("but");
-    await page.goto("/practice");
+    await page.goto("/practice", { waitUntil: "commit" });
     await page.getByLabel("Today’s lesson").selectOption("1");
     await page.getByRole("button", { name: /Flip & remember/ }).click();
     await page.locator(".flip-card").scrollIntoViewIfNeeded();
@@ -113,8 +115,14 @@ test.describe("network image failure", () => {
 
 test("every packaged image including summary sheets and icons decodes", async ({
   page,
+  baseURL,
 }) => {
-  await page.goto("/learn");
+  // Asset decoding does not need a SPA navigation or service-worker lifecycle.
+  await page.route("**/asset-decode-audit", (route) => route.fulfill({
+    contentType: "text/html",
+    body: "<!doctype html><html><body></body></html>",
+  }));
+  await page.goto("/asset-decode-audit", { waitUntil: "commit" });
   const manifest = await (
     await page.request.get("/offline-manifest.json")
   ).json();
@@ -125,13 +133,13 @@ test("every packaged image including summary sheets and icons decodes", async ({
     ]),
   ].filter((url) => /\.(png|webp|svg|jpe?g)$/i.test(url));
   expect(urls.length).toBeGreaterThan(150);
-  const failed = await page.evaluate(async (paths) => {
+  const failed = await page.evaluate(async ({ paths, origin }) => {
     const bad: string[] = [];
     for (let start = 0; start < paths.length; start += 10) {
       await Promise.all(
         paths.slice(start, start + 10).map(async (src) => {
           const image = new Image();
-          image.src = src;
+          image.src = new URL(src, origin).href;
           try {
             await image.decode();
             if (!image.naturalWidth) bad.push(src);
@@ -142,6 +150,6 @@ test("every packaged image including summary sheets and icons decodes", async ({
       );
     }
     return bad;
-  }, urls);
+  }, { paths: urls, origin: baseURL! });
   expect(failed).toEqual([]);
 });

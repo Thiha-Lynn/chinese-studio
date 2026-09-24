@@ -1,4 +1,10 @@
-# ESC release status · 1.2.4
+# ESC release status · 1.3.0
+
+Chinese 1 integration is prepared for publication. Release validation and website deployment are in progress; the previously published 1.2.4 remains the rollback release.
+
+See [Chinese 1 coverage and architecture](chinese1-archive.md) and [1.3.0 package notes](NATIVE_RELEASE.md). Exact release and deployment evidence will be recorded after the gates complete.
+
+## Previous published release
 
 ESC Chinese 1.2.4 is published and live at https://chinese.ztvmm.live. The release source is commit `6128ddb382d54429e5882d244e5ef9a948c7b595`; later commits expand image-test coverage and record verification results without changing the shipped application code.
 
@@ -27,7 +33,7 @@ Windows/macOS publisher signing and Apple notarization are not configured. There
 
 - Google sign-in and account backups are implemented, but OAuth client/consent-screen publication remains pending the owner's completion of Google's policy process. Account backups use explicit save/load rather than automatic multi-device merging.
 - Tutor access needs the existing online provider configuration and Google sign-in. It is not an offline model.
-- Chinese 1 still awaits an authorized account/export. Missing MDL audio/video and official assessment content are recorded in the source coverage screen.
+- The 1.2.4 release predates the Chinese 1 archive; 1.3.0 supplies that content with explicit source gaps.
 - MFU course resources and stroke data retain their original rights; the application MIT license does not relicense that material.
 
 The upgrade preserves application IDs, Android signing identity, Electron storage, browser progress keys, backup schema and the external production account database. The preceding production release remains available for rollback.

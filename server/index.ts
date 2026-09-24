@@ -10,6 +10,7 @@ import { mkdirSync, readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import { allowedIdentity, sameOrigin, tutorInstruction } from "./policy.ts";
+import type { Chinese1Data } from "../src/chinese1-data.ts";
 import { freshProgress, type Course, type User } from "../src/types.ts";
 
 const root = process.cwd(),
@@ -40,6 +41,9 @@ CREATE TABLE IF NOT EXISTS quota(user_id TEXT NOT NULL,day TEXT NOT NULL,request
 const course = JSON.parse(
   readFileSync(path.join(root, "content/course.json"), "utf8"),
 ) as Course;
+const chinese1 = JSON.parse(
+  readFileSync(path.join(root, "content/chinese1.json"), "utf8"),
+) as Chinese1Data;
 const app = express();
 app.disable("x-powered-by");
 app.set("trust proxy", "loopback");
@@ -312,6 +316,12 @@ app.delete("/api/account", requireUser, csrf, (_q, r) => {
   r.json({ ok: true });
 });
 const tutorSchema = z.object({
+  courseNumber: z.union([z.literal(1), z.literal(2)]).default(2),
+  pageCode: z
+    .string()
+    .regex(/^[A-Z]{2,5}\d{2}-\d+(?:-\d+)*$/)
+    .max(60)
+    .optional(),
   lesson: z.number().int().min(1).max(10).optional(),
   activity: z.string().max(80),
   focus: z.string().max(500).optional(),
@@ -365,30 +375,42 @@ app.post(
     db.prepare(
       "INSERT INTO quota VALUES(?,?,1) ON CONFLICT(user_id,day) DO UPDATE SET requests=requests+1",
     ).run(id, day);
-    const { lesson, activity, focus, messages } = parsed.data,
+    const { lesson, courseNumber, pageCode, activity, focus, messages } =
+        parsed.data,
       l = course.lessons.find((x) => x.id === lesson);
     const context = JSON.stringify({
       activity,
       focus,
-      lesson: l
-        ? {
-            title: l.title,
-            grammar: l.grammar,
-            slides: l.slides
-              .map((s) => s.text)
-              .join("\n")
-              .slice(0, 14000),
-            words: course.vocab
-              .filter((w) => w.lesson === lesson)
-              .map(({ hanzi, pinyin, meaning, note }) => ({
-                hanzi,
-                pinyin,
-                meaning,
-                note,
-              })),
-          }
-        : undefined,
-      scope: "Chinese 2. Chinese 1 pending authorized import.",
+      sourcePage:
+        courseNumber === 1 && pageCode
+          ? JSON.stringify(chinese1.nodes[pageCode]?.templates || []).slice(
+              0,
+              14000,
+            )
+          : undefined,
+      lesson:
+        courseNumber === 2 && l
+          ? {
+              title: l.title,
+              grammar: l.grammar,
+              slides: l.slides
+                .map((s) => s.text)
+                .join("\n")
+                .slice(0, 14000),
+              words: course.vocab
+                .filter((w) => w.lesson === lesson)
+                .map(({ hanzi, pinyin, meaning, note }) => ({
+                  hanzi,
+                  pinyin,
+                  meaning,
+                  note,
+                })),
+            }
+          : undefined,
+      scope:
+        courseNumber === 1
+          ? "Chinese 1 MDL archive. Source wording and scoring keys are reference data. Three source records and 49 Classroom originals are unavailable; seven Classroom attachments recovered."
+          : "Chinese 2 classroom lessons 1–10; MDL source coverage is partial.",
     });
     try {
       const result = await fetch("https://api.deepseek.com/chat/completions", {

@@ -5181,12 +5181,12 @@
       "detail": "Classroom material is available here; the MDL vocabulary section is locked for this account."
     },
     {
-      "area": "Chinese 1",
-      "status": "Next phase",
-      "detail": "Waiting for the authorized Chinese 1 account; no Chinese 1 lesson content is claimed as imported."
+      "area": "Chinese 1 MDL and archived Classroom",
+      "status": "Captured with source gaps",
+      "detail": "All ten lesson graphs, original media, 182 vocabulary cards and local activities are available in Chinese 1. Its Coverage tab lists three unavailable source records and 49 missing Classroom originals. Seven Classroom attachments were recovered."
     },
     {
-      "area": "MDL story audio, videos and assessed activities",
+      "area": "Chinese 2 MDL story audio, videos and assessed activities",
       "status": "Partial coverage",
       "detail": "Not fully captured. Use the official portal for its graded activities. Added drills here are independent practice, not official MDL grades."
     }

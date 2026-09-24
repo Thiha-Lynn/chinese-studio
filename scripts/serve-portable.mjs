@@ -3,7 +3,10 @@ import { readFile, stat } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-const root = path.resolve(process.env.STUDIO_WEB_ROOT || path.join(path.dirname(fileURLToPath(import.meta.url)), "web"));
+const root = path.resolve(
+  process.env.STUDIO_WEB_ROOT ||
+    path.join(path.dirname(fileURLToPath(import.meta.url)), "web"),
+);
 const types = {
   ".txt": "text/plain; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -13,6 +16,12 @@ const types = {
   ".webmanifest": "application/manifest+json",
   ".svg": "image/svg+xml",
   ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".mp3": "audio/mpeg",
+  ".mp4": "video/mp4",
+  ".zip": "application/zip",
   ".webp": "image/webp",
   ".pdf": "application/pdf",
   ".pptx":

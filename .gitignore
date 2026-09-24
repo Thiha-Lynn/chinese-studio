@@ -16,3 +16,6 @@ playwright-report/
 
 *.jks
 *.keystore
+
+# Verified original media restored from the pinned archive release.
+library/chinese1/media/

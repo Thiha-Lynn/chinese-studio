@@ -57,12 +57,16 @@ type Props = {
   progress: Progress;
   setProgress: (f: (p: Progress) => Progress) => void;
   initialLesson?: number;
+  courseName?: string;
+  includeSentences?: boolean;
 };
 export default function Practice({
   course,
   progress,
   setProgress,
   initialLesson = 0,
+  courseName = "Chinese 2",
+  includeSentences = true,
 }: Props) {
   const [lesson, setLesson] = useState(initialLesson),
     [mode, setMode] = useState(""),
@@ -179,7 +183,7 @@ export default function Practice({
           value={lesson}
           onChange={(e) => setLesson(+e.target.value)}
         >
-          <option value={0}>All Chinese 2 lessons</option>
+          <option value={0}>All {courseName} lessons</option>
           {course.lessons.map((l) => (
             <option value={l.id} key={l.id}>
               Lesson {l.id} · {l.theme}
@@ -187,22 +191,24 @@ export default function Practice({
           ))}
         </select>
         <div className="mode-grid">
-          {modes.map(({ id, name, hint, icon: Icon }, i) => (
-            <button
-              className={"mode-card tint-" + i}
-              key={id}
-              onClick={() => start(id)}
-            >
-              <span className="mode-icon">
-                <Icon />
-              </span>
-              <h2>{name}</h2>
-              <p>{hint}</p>
-              <span className="link-text">
-                Let’s go <ArrowRight size={18} />
-              </span>
-            </button>
-          ))}
+          {modes
+            .filter((m) => includeSentences || m.id !== "sentence")
+            .map(({ id, name, hint, icon: Icon }, i) => (
+              <button
+                className={"mode-card tint-" + i}
+                key={id}
+                onClick={() => start(id)}
+              >
+                <span className="mode-icon">
+                  <Icon />
+                </span>
+                <h2>{name}</h2>
+                <p>{hint}</p>
+                <span className="link-text">
+                  Let’s go <ArrowRight size={18} />
+                </span>
+              </button>
+            ))}
         </div>
       </>
     );
