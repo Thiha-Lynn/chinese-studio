@@ -1,6 +1,6 @@
-# ESC Chinese 1.3.0
+# ESC Chinese 1.3.1
 
-Chinese 1 joins the learning ecosystem: ten MDL lessons, 1,152 source pages, 182 vocabulary cards, 582 activity question records, original audio and 30 videos. Seven archived Classroom originals are included. Three missing MDL records, one unavailable audio file and 49 unavailable Classroom files are explicitly documented in Coverage.
+Chinese 1 is now prominent in the main navigation and the learning home page, with direct links to every lesson alongside Chinese 2. The learning ecosystem includes: ten MDL lessons, 1,152 source pages, 182 vocabulary cards, 582 activity question records, original audio and 30 videos. Seven archived Classroom originals are included. Three missing MDL records, one unavailable audio file and 49 unavailable Classroom files are explicitly documented in Coverage.
 
 Search, English/Chinese/pinyin/Thai reading, local source-based answer checking, independent drills, handwriting, source downloads and existing progress backups work together. Browser offline downloads make large videos optional. Desktop, Android and portable packages include the full recovered library. Existing Chinese 2 lessons and all app identities remain intact. See [archive notes](https://github.com/Thiha-Lynn/chinese-studio/blob/main/docs/chinese1-archive.md).
 
@@ -30,6 +30,6 @@ Every download has a SHA-256 entry in `SHA256SUMS`. Code is MIT; the existing co
 
 ## Updating from Chinese Studio
 
-The application display name is now **ESC Chinese**. Package filenames start with `esc-chinese-1.3.0-`. Android keeps `live.ztvmm.chinese` and the existing release key. Desktop retains its application ID, local origin and historical data directory; Linux keeps the executable/package identity. Browser progress keys and JSON backup structure are unchanged. Export progress before changing installations. The website and the apps use separate device storage.
+The application display name is now **ESC Chinese**. Package filenames start with `esc-chinese-1.3.1-`. Android keeps `live.ztvmm.chinese` and the existing release key. Desktop retains its application ID, local origin and historical data directory; Linux keeps the executable/package identity. Browser progress keys and JSON backup structure are unchanged. Export progress before changing installations. The website and the apps use separate device storage.
 
 A previously cached web installation can keep showing Chinese Studio while the new version waits for open sessions to close. Close all tabs and installed-app windows for this site, then reopen online after the update downloads. Do not clear site data to change the branding: that also removes local progress. ESC versions show an **Update ESC** action when a later web release is ready.

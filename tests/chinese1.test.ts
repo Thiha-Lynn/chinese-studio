@@ -33,7 +33,19 @@ test("Chinese 1 graph preserves all chapters, source types and explicit missing 
     for (const c of n.children) assert.ok(data.nodes[c] || gaps.has(c), c);
     walk(n.templates);
   }
+  const index = JSON.parse(
+    readFileSync("content/chinese1-lessons.json", "utf8"),
+  );
+  assert.equal(index.length, data.lessons.length);
   for (const l of data.lessons) {
+    assert.deepEqual(
+      index.find((x: any) => x.id === l.id),
+      {
+        ...l,
+        art: data.media[l.art],
+        words: data.vocab.filter((w: any) => w.lesson === l.id).length,
+      },
+    );
     assert.ok(l.chapters > 0);
     assert.ok(l.pages > 0);
     assert.ok(data.vocab.some((w: any) => w.lesson === l.id));

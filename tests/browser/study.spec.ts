@@ -11,7 +11,7 @@ test("public lessons, theme, navigation and mobile layout", async ({
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await go(page, "/learn");
-  await expect(page.locator(".world-card")).toHaveCount(10);
+  await expect(page.locator(".world-card")).toHaveCount(20);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

@@ -45,6 +45,7 @@ import Oral from "./Oral";
 import "./style.css";
 import Offline from "./Offline";
 import { brand } from "./brand";
+import chinese1Lessons from "../content/chinese1-lessons.json";
 import ChoiceTabs from "./ChoiceTabs";
 import School from "./School";
 import AppUpdate from "./AppUpdate";
@@ -103,6 +104,7 @@ function Link({
 const nav = [
   ["/school", "Our school", GraduationCap],
   ["/learn", "My learning", BookOpen],
+  ["/course/1", "Chinese 1 lessons", BookOpen],
   ["/vocabulary", "Vocabulary", Layers],
   ["/practice", "Practice", Play],
   ["/oral", "Oral test", Mic],
@@ -366,10 +368,6 @@ function App() {
           <Link to="/coverage" className="subtle-link">
             <ShieldCheck size={16} />
             Sources & coverage
-          </Link>
-          <Link to="/course/1" className="subtle-link">
-            <BookOpen size={16} />
-            Chinese 1 <span className="tiny-tag">NEW</span>
           </Link>
           <a
             href="https://github.com/Thiha-Lynn/chinese-studio"
@@ -929,6 +927,18 @@ function Home({
         </span>
         <span>ESC CHINESE LANGUAGE TRAINING CENTER</span>
       </div>
+      <nav className="course-picker" aria-label="Choose a course">
+        <a href="#chinese1-lessons">
+          <strong>Chinese 1</strong>
+          <span>Foundations · 10 lessons · 182 words</span>
+          <ArrowRight size={20} />
+        </a>
+        <a href="#chinese2-lessons">
+          <strong>Chinese 2</strong>
+          <span>Continue learning · 10 lessons · 249 words</span>
+          <ArrowRight size={20} />
+        </a>
+      </nav>
       <section className="home-hero">
         <div className="hero-copy">
           <span className="eyebrow">
@@ -974,9 +984,10 @@ function Home({
           </span>
           <div>
             <strong>
-              {course.lessons.length} <small>lessons</small>
+              {course.lessons.length + chinese1Lessons.length}{" "}
+              <small>lessons</small>
             </strong>
-            <span>Ready when you are</span>
+            <span>Across Chinese 1 &amp; 2</span>
           </div>
         </div>
         <div>
@@ -987,7 +998,7 @@ function Home({
             <strong>
               {learned} <small>/ {course.vocab.length} words</small>
             </strong>
-            <span>Words you have learned</span>
+            <span>Chinese 2 words learned</span>
           </div>
         </div>
         <div>
@@ -1010,7 +1021,45 @@ function Home({
           Meet your school <ArrowRight size={16} />
         </Link>
       </div>
-      <div className="section-heading">
+      <section aria-labelledby="chinese1-lessons">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">START WITH THE FOUNDATIONS</span>
+            <h2 id="chinese1-lessons">Your Chinese 1 lessons</h2>
+          </div>
+          <Link to="/course/1" className="text-button">
+            All Chinese 1 study tools <ArrowRight size={16} />
+          </Link>
+        </div>
+        <div className="world-grid">
+          {chinese1Lessons.map((l, i) => (
+            <Link
+              key={l.id}
+              to={`/course/1?page=${l.code}`}
+              className={"world-card tint-" + (i % 5)}
+            >
+              <div className="world-card-top">
+                <span>CHINESE 1 · LESSON {String(l.id).padStart(2, "0")}</span>
+              </div>
+              <div className="world-image">
+                <span className="world-ground" />
+                <img loading="lazy" src={l.art} alt="" />
+              </div>
+              <span className="lesson-theme" lang="zh">
+                {l.title.CN}
+              </span>
+              <h3>{l.title.EN.replace(/^Lesson\s*\d+\s*-\s*/i, "")}</h3>
+              <div className="world-card-bottom">
+                <span>
+                  {l.words} words · {l.chapters} chapters · {l.pages} pages
+                </span>
+                <ArrowRight size={18} />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+      <div className="section-heading" id="chinese2-lessons">
         <div>
           <span className="eyebrow">CHOOSE YOUR NEXT CHAPTER</span>
           <h2>Your Chinese 2 lessons</h2>

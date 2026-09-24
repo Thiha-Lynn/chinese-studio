@@ -28,7 +28,7 @@ try {
   page.setDefaultTimeout(20000);
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await expect(page.locator(".world-card")).toHaveCount(10);
+  await expect(page.locator(".world-card")).toHaveCount(20);
   expect(await page.evaluate(() => typeof require)).toBe("undefined");
   expect(await app.evaluate(({ app }) => app.isPackaged)).toBe(true);
   // Block remote traffic: packaged lessons and resources must still function.

@@ -60,6 +60,8 @@ referenced=load(SRC/'asset-references.json',[])
 stats={'nodes':len(nodes),'pages':sum(len(n['templates']) for n in nodes.values()),'vocabulary':len(vocab),'questions':sum(len(t.get('content',{}).get('question',[])) for n in nodes.values() for t in n['templates']),'mediaReferenced':len(referenced),'mediaDownloaded':len(media_map),'mediaFailed':len(referenced)-len(media_map),'classroomReferenced':len(classroom['resources']),'classroomDownloaded':sum(r['status']=='downloaded' for r in classroom['resources'])}
 data={'version':1,'capturedAt':'2026-09-23','source':'https://mdl.mfu.ac.th/#/v4/HP01/1','lessons':lessons,'nodes':nodes,'vocab':vocab,'media':media_map,'mediaGaps':[{'source':r['source'],'error':r.get('error',r['status'])} for r in media if r['status']!='downloaded'],'classroom':classroom,'gaps':errors,'stats':stats}
 (ROOT/'content/chinese1.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':')))
+index=[{**l,'art':media_map[l['art']],'words':sum(w['lesson']==l['id'] for w in vocab)} for l in lessons]
+(ROOT/'content/chinese1-lessons.json').write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n')
 (OUT/'media-manifest.json').write_text(json.dumps(media,ensure_ascii=False,indent=2))
 (OUT/'classroom-manifest.json').write_text(json.dumps(classroom,ensure_ascii=False,indent=2))
 with zipfile.ZipFile(OUT/'source-records.zip','w',zipfile.ZIP_DEFLATED) as z:

@@ -83,3 +83,33 @@ test("Chinese 1 video uses a full-width playable source", async ({ page }) => {
   const box = await video.boundingBox();
   expect(box!.width).toBeGreaterThan(200);
 });
+
+test("learning home exposes all ten Chinese 1 lessons beside Chinese 2", async ({
+  page,
+}) => {
+  await page.goto("/learn", { waitUntil: "commit" });
+  await expect(
+    page.getByRole("navigation", { name: "Choose a course" }),
+  ).toBeVisible();
+  const course1 = page.getByRole("region", { name: "Your Chinese 1 lessons" });
+  await expect(course1.locator(".world-card")).toHaveCount(10);
+  await expect(page.locator(".world-card")).toHaveCount(20);
+  for (let n = 1; n <= 10; n++) {
+    await expect(course1.locator(".world-card").nth(n - 1)).toHaveAttribute(
+      "href",
+      `/course/1?page=HP02-${n}`,
+    );
+  }
+  await course1.locator(".world-card").first().click();
+  await expect(
+    page.getByRole("heading", { name: "Lesson 1 New Master", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Chapter 1 Master An an" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});
