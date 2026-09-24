@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "code": "HP02-1",
+    "title": {
+      "TH": "บทที่ 1-อาจารย์คนใหม่",
+      "EN": "Lesson 1-New Master",
+      "CN": "第 一 课-新老师",
+      "PIN IN": "Dì yī kè-xīn lǎoshī"
+    },
+    "art": "/library/chinese1/media/ca5064302a16dbbd2c49e269.png",
+    "chapters": 7,
+    "pages": 119,
+    "words": 7
+  },
+  {
+    "id": 2,
+    "code": "HP02-2",
+    "title": {
+      "TH": "บทที่ 2-ช่วยเหลือ",
+      "EN": "Lesson 2-Help",
+      "CN": "第二课-帮助",
+      "PIN IN": "Dì èr kè-bāngzhù"
+    },
+    "art": "/library/chinese1/media/44e8649b71a7fffb02e7f504.png",
+    "chapters": 8,
+    "pages": 128,
+    "words": 17
+  },
+  {
+    "id": 3,
+    "code": "HP02-3",
+    "title": {
+      "TH": "บทที่ 3-ธรรมเนียมโบราณ",
+      "EN": "Lesson 3-Ancient Tradition ",
+      "CN": "第三课-古代传统",
+      "PIN IN": "Dì Sān kè-Gǔdài chuántǒng"
+    },
+    "art": "/library/chinese1/media/6893cdfbce1e5c71ce7bbf7d.png",
+    "chapters": 8,
+    "pages": 101,
+    "words": 12
+  },
+  {
+    "id": 4,
+    "code": "HP02-4",
+    "title": {
+      "TH": "บทที่ 4-ลูกศิษย์ต่างชาติ",
+      "EN": "Lesson 4-Foreign student",
+      "CN": "第四课-外国学生",
+      "PIN IN": "Dì sì kè-wàiguó xuéshēng"
+    },
+    "art": "/library/chinese1/media/75f6227b90dd9e40e65a256d.png",
+    "chapters": 8,
+    "pages": 110,
+    "words": 25
+  },
+  {
+    "id": 5,
+    "code": "HP02-5",
+    "title": {
+      "TH": "บทที่ 5-คู่หูขี้เล่น",
+      "EN": "Lesson 5-Playful Friend",
+      "CN": "第五课-我的朋友",
+      "PIN IN": "Dì wǔ kè-wǒ de péngyǒu"
+    },
+    "art": "/library/chinese1/media/d6de7e6e5cdf64ac538300c5.png",
+    "chapters": 8,
+    "pages": 95,
+    "words": 15
+  },
+  {
+    "id": 6,
+    "code": "HP02-6",
+    "title": {
+      "TH": "บบทที่ 6-เตร็ดเตร่ในเมือง",
+      "EN": "Lesson 6-Wandering in the city",
+      "CN": "第六课-城市里徘徊",
+      "PIN IN": "Dì liù kè-chéngshì lǐ páihuái"
+    },
+    "art": "/library/chinese1/media/ba98633c8d6cf8a490456db2.png",
+    "chapters": 7,
+    "pages": 108,
+    "words": 34
+  },
+  {
+    "id": 7,
+    "code": "HP02-7",
+    "title": {
+      "TH": "บทที่ 7-เยือนบ้านสหายใหม่",
+      "EN": "Lesson 7-Visiting a Friend's House",
+      "CN": "第七课-故交的新家",
+      "PIN IN": "Dì qī kè-gùjiāo de xīnjiā"
+    },
+    "art": "/library/chinese1/media/3ee40b52ae2550029b223300.png",
+    "chapters": 7,
+    "pages": 97,
+    "words": 21
+  },
+  {
+    "id": 8,
+    "code": "HP02-8",
+    "title": {
+      "TH": "บทที่ 8-ตัวคนเดียว",
+      "EN": "Lesson 8-All alone",
+      "CN": "第八课-孤身一人",
+      "PIN IN": "Dì bā kè-gū shēn yī rén"
+    },
+    "art": "/library/chinese1/media/19933f147353fafa5452ace4.png",
+    "chapters": 7,
+    "pages": 92,
+    "words": 16
+  },
+  {
+    "id": 9,
+    "code": "HP02-9",
+    "title": {
+      "TH": "บทที่ 9-โดนลากตัว",
+      "EN": "Lesson 9-Dragged",
+      "CN": "第九课-被逼迫",
+      "PIN IN": "Dì jiǔ kè-bèi bī pò"
+    },
+    "art": "/library/chinese1/media/a42d6375e9357ab3739c04e6.png",
+    "chapters": 7,
+    "pages": 89,
+    "words": 17
+  },
+  {
+    "id": 10,
+    "code": "HP02-10",
+    "title": {
+      "TH": "บทที่ 10-ในที่สุดก็หาเจอ",
+      "EN": "Lesson 10-Finally",
+      "CN": "第十课-终于找到了",
+      "PIN IN": "Dì  shí kè-zhōng yú zhǎo dào le"
+    },
+    "art": "/library/chinese1/media/7d02d3a0ca5d4e31e2f7ad9e.png",
+    "chapters": 8,
+    "pages": 105,
+    "words": 18
+  }
+]

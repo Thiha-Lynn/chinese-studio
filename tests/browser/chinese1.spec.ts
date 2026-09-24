@@ -4,7 +4,7 @@ test("Chinese 1 search, original activity scoring, persistence and independent p
 }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/course/1");
+  await page.goto("/course/1", { waitUntil: "commit" });
   await expect(
     page.getByRole("button", { name: "Explore lesson →" }),
   ).toHaveCount(10);
@@ -19,7 +19,7 @@ test("Chinese 1 search, original activity scoring, persistence and independent p
     page.getByText("Correct according to the archived source key."),
   ).toBeVisible();
   await page.getByRole("checkbox", { name: "Mark this page studied" }).check();
-  await page.reload();
+  await page.reload({ waitUntil: "commit" });
   await expect(
     page.getByRole("checkbox", { name: "Mark this page studied" }),
   ).toBeChecked();
@@ -40,14 +40,14 @@ test("Chinese 1 search, original activity scoring, persistence and independent p
 test("Chinese 1 source sentence order and multilingual story fit the screen", async ({
   page,
 }) => {
-  await page.goto("/course/1?page=IAM08-1");
+  await page.goto("/course/1?page=IAM08-1", { waitUntil: "commit" });
   for (const name of ["B 她", "A 是", "C 谁", "D ？"])
     await page.getByRole("checkbox", { name, exact: true }).check();
   await page.getByRole("button", { name: "Check answer", exact: true }).click();
   await expect(
     page.getByText("Correct according to the archived source key."),
   ).toBeVisible();
-  await page.goto("/course/1?page=CTT02-1");
+  await page.goto("/course/1?page=CTT02-1", { waitUntil: "commit" });
   await page.getByLabel("Source language").selectOption("TH");
   await expect(
     page.getByText("ที่นี่ที่ไหนกัน", { exact: true }),
@@ -60,14 +60,14 @@ test("Chinese 1 source sentence order and multilingual story fit the screen", as
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await page.goto("/course/1?page=CTA01-183");
+  await page.goto("/course/1?page=CTA01-183", { waitUntil: "commit" });
   await expect(
     page.getByRole("heading", { name: "Source page unavailable" }),
   ).toBeVisible();
 });
 
 test("Chinese 1 video uses a full-width playable source", async ({ page }) => {
-  await page.goto("/course/1?page=CTV01-1");
+  await page.goto("/course/1?page=CTV01-1", { waitUntil: "commit" });
   const video = page.locator(".c1-reader video");
   await expect(video).toBeVisible();
   await video.evaluate((el: HTMLVideoElement) => {
@@ -82,4 +82,56 @@ test("Chinese 1 video uses a full-width playable source", async ({ page }) => {
   ).toBeGreaterThan(0);
   const box = await video.boundingBox();
   expect(box!.width).toBeGreaterThan(200);
+});
+
+test("learning home exposes all ten Chinese 1 lessons beside Chinese 2", async ({
+  page,
+}) => {
+  await page.goto("/learn", { waitUntil: "commit" });
+  await expect(
+    page.getByRole("navigation", { name: "Choose a course" }),
+  ).toBeVisible();
+  const course1 = page.getByRole("region", { name: "Your Chinese 1 lessons" });
+  await expect(course1.locator(".world-card")).toHaveCount(10);
+  await expect(page.locator(".world-card")).toHaveCount(20);
+  for (let n = 1; n <= 10; n++) {
+    await expect(course1.locator(".world-card").nth(n - 1)).toHaveAttribute(
+      "href",
+      `/course/1?page=HP02-${n}`,
+    );
+  }
+  await course1.locator(".world-card").first().click();
+  await expect(
+    page.getByRole("heading", { name: "Lesson 1 New Master", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Chapter 1 Master An an" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+});
+
+test("Chinese 1 accepts alternative source answers without requiring two radio choices", async ({
+  page,
+}) => {
+  await page.goto("/course/1?page=IAM08-36", { waitUntil: "commit" });
+  for (const name of ["D 今天", "E 你", "C 去", "A 哪儿", "B ?"])
+    await page.getByRole("checkbox", { name, exact: true }).check();
+  await page.getByRole("button", { name: "Check answer", exact: true }).click();
+  await expect(
+    page.getByText("Correct according to the archived source key."),
+  ).toBeVisible();
+  await page.goto("/course/1?page=IAM05-286", { waitUntil: "commit" });
+  for (const name of ["A nà", "C nàr"]) {
+    await page.getByRole("radio", { name, exact: true }).check();
+    await page
+      .getByRole("button", { name: "Check answer", exact: true })
+      .click();
+    await expect(
+      page.getByText("Correct according to the archived source key."),
+    ).toBeVisible();
+  }
 });

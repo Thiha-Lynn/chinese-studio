@@ -5,7 +5,7 @@ const { version } = JSON.parse(
 );
 
 async function go(page: Page, path: string) {
-  await page.goto(path);
+  await page.goto(path, { waitUntil: "commit" });
   await expect(page.locator("#main")).toBeVisible();
 }
 async function fits(page: Page) {
@@ -96,7 +96,7 @@ test("all ten lessons expose working sections, slides and saved notes", async ({
       page.getByLabel(`My Lesson ${lesson} working notes`),
     ).toHaveValue(`ESC lesson ${lesson} notes`);
   }
-  await page.reload();
+  await page.reload({ waitUntil: "commit" });
   await page.getByRole("button", { name: "Assignments", exact: true }).click();
   await expect(page.getByLabel("My Lesson 10 working notes")).toHaveValue(
     "ESC lesson 10 notes",
@@ -270,7 +270,7 @@ test("display preferences persist and a shrinking vocabulary page recovers", asy
   await go(page, "/vocabulary");
   await page.getByRole("button", { name: "Use immersive visuals" }).click();
   await page.getByRole("button", { name: "Toggle color theme" }).click();
-  await page.reload();
+  await page.reload({ waitUntil: "commit" });
   await expect(
     page.getByRole("button", { name: "Use calm flat visuals" }),
   ).toHaveAttribute("aria-pressed", "true");
@@ -292,7 +292,7 @@ test("display preferences persist and a shrinking vocabulary page recovers", asy
   await page
     .getByRole("button", { name: "Keep my progress", exact: true })
     .click();
-  await page.reload();
+  await page.reload({ waitUntil: "commit" });
   await expect(
     page.locator(".progress-stats").getByText("8", { exact: true }),
   ).toBeVisible();

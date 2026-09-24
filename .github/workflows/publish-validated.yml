@@ -39,11 +39,16 @@ jobs:
               run = api('/actions/runs/'+run_id)
               assert run['status'] == 'completed', (kind, 'run still active')
               assert run['path'] == '.github/workflows/native.yml'
-              jobs = api('/actions/runs/'+run_id+'/jobs?per_page=100')['jobs']
+              history = api('/actions/runs/'+run_id+'/jobs?per_page=100&filter=all')
+              assert history['total_count'] <= 100, 'Too many attempts for a bounded release audit'
+              latest = {}
+              for job in sorted(history['jobs'], key=lambda j: j['id']):
+                  latest[job['name']] = job
+              jobs = list(latest.values())
               selected = [j for j in jobs if j['name'].startswith('desktop (')] if kind == 'DESKTOP' else [j for j in jobs if j['name'] == kind.lower()]
               assert len(selected) == (6 if kind == 'DESKTOP' else 1)
               assert all(j['conclusion'] == 'success' for j in selected), [(j['name'],j['conclusion']) for j in selected]
-              subprocess.run(['git','diff','--exit-code',run['head_sha'],os.environ['GITHUB_SHA'],'--','.',':(exclude).github/**',':(exclude)docs/**',':(exclude)tests/**',':(exclude)scripts/test-android-release.sh'],check=True)
+              subprocess.run(['git','diff','--exit-code',run['head_sha'],os.environ['GITHUB_SHA'],'--','.',':(exclude).github/**',':(exclude)docs/**',':(exclude)tests/**',':(exclude)scripts/test-android-release.sh',':(exclude)android/app/src/androidTest/**'],check=True)
               print(kind, run_id, run['head_sha'], 'validated; application source identical')
           PY
       - uses: actions/download-artifact@v4
