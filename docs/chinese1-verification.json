@@ -1,0 +1,23 @@
+{
+  "version": "4cb8b83a48d17f1b",
+  "publicFilesChecked": 1869,
+  "failures": [],
+  "verifiedAt": "2026-09-24",
+  "release": "1.3.1",
+  "publicSite": "https://chinese.ztvmm.live",
+  "nativeWorkflow": 35957097240,
+  "browserChecks": 76,
+  "unitChecks": 8,
+  "desktopTargets": 6,
+  "androidVersions": [15, 16],
+  "publicRoutes": 13,
+  "chinese1Lessons": 10,
+  "chinese1Chapters": 75,
+  "webFilesMatchedBySha256": 1894,
+  "installerChecksumsVerified": 10,
+  "sourceGaps": {
+    "mdlRecords": ["CTA01-183", "LKA01-21", "LKT04-9"],
+    "audioFiles": 1,
+    "classroomAttachments": 49
+  }
+}

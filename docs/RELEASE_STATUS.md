@@ -1,39 +1,36 @@
-# ESC release status · 1.3.0
+# ESC release status · 1.3.1
 
-Chinese 1 integration is prepared for publication. Release validation and website deployment are in progress; the previously published 1.2.4 remains the rollback release.
+ESC Chinese 1.3.1 is published and live as of 24 September 2026. Chinese 1 lessons are prominent beside Chinese 2, and source activities accept all valid archived answers.
 
-See [Chinese 1 coverage and architecture](chinese1-archive.md) and [1.3.0 package notes](NATIVE_RELEASE.md). Exact release and deployment evidence will be recorded after the gates complete.
+- [Live learning home](https://chinese.ztvmm.live/learn) · [Chinese 1](https://chinese.ztvmm.live/course/1)
+- [App downloads and checksums](https://github.com/Thiha-Lynn/chinese-studio/releases/tag/v1.3.1)
+- [Native release validation](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35957097240)
+- [Final browser/portable validation](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35957237389)
+- [Three-platform source checks](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35957240215)
+- [Merged discovery and scoring changes](https://github.com/Thiha-Lynn/chinese-studio/pull/2)
 
-## Previous published release
+## Published content and behavior
 
-ESC Chinese 1.2.4 is published and live at https://chinese.ztvmm.live. The release source is commit `6128ddb382d54429e5882d244e5ef9a948c7b595`; later commits expand image-test coverage and record verification results without changing the shipped application code.
+The learning home lists all ten Chinese 1 lessons beside all ten Chinese 2 lessons. A visible course chooser and primary Chinese 1 navigation link provide direct access on desktop and mobile. Chinese 1 includes 75 chapters, 1,152 source pages, 582 activity question records, 182 vocabulary cards, 1,205 recovered original media files including 30 videos, and seven Classroom originals. Source sentence activities accept all positively keyed alternatives; single-choice activities accept any one positively keyed choice.
 
-- [Download apps and checksums](https://github.com/Thiha-Lynn/chinese-studio/releases/tag/v1.2.4)
-- [Native release validation](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35483955232): all jobs passed.
-- [Source build matrix](https://github.com/Thiha-Lynn/chinese-studio/actions/runs/35483955284): all jobs passed.
-- [Visual repair audit and deployment evidence](VISUAL_REPAIR.md)
+Chinese 2 retains its ten lessons, 485 slide-text pages, 249 vocabulary entries, original decks, worksheets and oral rehearsal. Shared progress, handwriting, resources, source downloads, offline study and backup remain integrated.
 
-## Included and verified
+## Verification evidence
 
-Version 1.2.4 repairs vocabulary button layouts across all 249 words, adds ESC character cards for the 110 words without original illustrations, and handles unavailable images in vocabulary and practice. All 164 packaged image files were checked against production and decoded in all four browser configurations.
+Eight unit/content checks and all 76 browser checks passed across Firefox, mobile WebKit, desktop Chromium and mobile Chromium. Browser coverage includes both courses, all main sections, source-based activity scoring, lesson discovery, image decoding, progress persistence and offline resources.
 
-Navy-and-gold ESC identity across the website, PWA, Android and desktop apps; school information and Facebook links; consistent selected, expanded and disabled controls; keyboard/mobile navigation, theme and layout improvements; progress compatibility and a complete platform download center.
+All six desktop architecture jobs passed installed/extracted application tests: Windows x64/ARM64, macOS Intel/Apple Silicon and Linux x64/ARM64. Tests load the complete 1,869-resource library, exercise Chinese 1 activities/video, handwriting, export, narrow layouts and progress after restart. Signed Android APK checks passed on Android 15 and 16 with networking disabled. All 1,894 bundled Android web files match the source build by SHA-256. The existing Android signing identity is preserved.
 
-Ten Chinese 2 lessons, 485 slide-text pages, 249 vocabulary entries, 333 stroke guides and 529 offline resources retain their source attribution. The native apps include the available library for first-launch offline study.
+Release application source: `c73759d19686cddd69973913a9447879884f7510`; merged integration: `8bba584eb49a05283d8d16af42320aa0628eba8e`. The later test commit changes navigation waits without changing application source. The deployed website's 1,894 files match the verified local build, with offline manifest `4cb8b83a48d17f1b`.
 
-All 56 browser checks and five unit checks passed. Desktop packages were installed/extracted and launched on Windows, macOS and Linux on both x64 and ARM64. Signed Android APK installation and offline study passed on Android 15 and 16 emulators. The portable ZIP and all ten public downloads were verified; release asset digests match SHA256SUMS. The live deployment's 551 web files match the local release build.
+All ten public installers and SHA256SUMS return HTTP 200 with the expected sizes; every installer's GitHub SHA-256 digest matches the checksum manifest. Production serves release 1.3.1. The public HTML, Chinese 1 dataset and offline manifest match the release build exactly, and audio/video range requests return HTTP 206.
 
-## Platform support and limits
+All 1,869 public resource URLs passed status, size and content-type checks with no remaining failures. The public browser verified all 13 main routes, all ten Chinese 1 lesson destinations and their 75 chapter links, with no console errors. The home displays 20 lesson cards and the primary Chinese 1 navigation link. Activating **Update ESC** from a cached prior build preserved existing progress. Version 1.3.0 remains available for rollback.
 
-Android APK; Windows x64/ARM64 EXE; Intel/Apple Silicon macOS DMG; Linux x64/ARM64 DEB and AppImage; portable ZIP; responsive web/PWA. iPhone/iPad use the installable web app. See [compatibility and installation notes](NATIVE_RELEASE.md) and [build instructions](NATIVE_BUILDS.md).
+## Source and platform limits
 
-Windows/macOS publisher signing and Apple notarization are not configured. There is no signed iOS IPA, App Store release or Play Store listing. Physical-device microphone/voice availability and every historical operating-system version are not certified by runner/emulator tests. Only the portable ZIP needs a separate Node.js installation.
+[Chinese 1 coverage](chinese1-archive.md) records three MDL pages, one audio file and 49 Classroom attachments unavailable at their original sources. This is an independent study adaptation; it does not reproduce MFU's game engine, unlock state, authentication or graded submissions. Original university resources retain their original rights.
 
-## Existing service and content dependencies
+Windows/macOS publisher signing and Apple notarization are not configured. iPhone/iPad use the installable web app; there is no iOS IPA, App Store release or Play Store listing. Runner/emulator checks do not certify every physical device or historical operating-system version. Only the portable ZIP requires a separate Node.js installation. See [installation notes](NATIVE_RELEASE.md).
 
-- Google sign-in and account backups are implemented, but OAuth client/consent-screen publication remains pending the owner's completion of Google's policy process. Account backups use explicit save/load rather than automatic multi-device merging.
-- Tutor access needs the existing online provider configuration and Google sign-in. It is not an offline model.
-- The 1.2.4 release predates the Chinese 1 archive; 1.3.0 supplies that content with explicit source gaps.
-- MFU course resources and stroke data retain their original rights; the application MIT license does not relicense that material.
-
-The upgrade preserves application IDs, Android signing identity, Electron storage, browser progress keys, backup schema and the external production account database. The preceding production release remains available for rollback.
+Google account backup and online tutoring retain their existing service configuration and requirements. Backups use explicit save/load, not automatic merging. Browser progress, application IDs, desktop storage, Android signing identity and the external production account database are preserved. The previous production release remains available for rollback. A cached browser can activate the new build with **Update ESC** without clearing saved progress.

@@ -53,9 +53,11 @@ Application code and original contributions: **MIT**. Original MFU course conten
 
 The [release downloads](https://github.com/Thiha-Lynn/chinese-studio/releases) include native Windows installers, macOS disk images, Linux AppImage/Debian packages and a release-signed Android APK from v1.1.0 onward. All included lessons ship inside each app. See [supported platforms and installation notes](docs/NATIVE_RELEASE.md) and [native build instructions](docs/NATIVE_BUILDS.md). iPhone/iPad use the installable web app. Windows/macOS publisher signing and an iOS IPA are not included.
 
-## ESC 1.3.0 Chinese 1 archive
+## ESC 1.3.1 Chinese 1 lessons
 
-Ten Chinese 1 MDL lessons, 1,152 pages, 582 activity questions, 182 vocabulary cards, 1,205 original media files and seven recovered Classroom originals join the existing Chinese 2 library. Search, multilingual reading, source-based practice, handwriting, optional browser video downloads and progress backups are integrated. Source gaps are explicitly listed. Fresh builds restore a checksum-pinned 1.28 GB media archive automatically; allow enough disk space for builds and native packages.
+The learning home lists all ten Chinese 1 lessons beside Chinese 2, with a course chooser and a primary navigation link. Activity grading accepts every valid archived sentence order and positively keyed single-choice answer.
+
+Ten Chinese 1 MDL lessons, 75 chapters, 1,152 pages, 582 activity questions, 182 vocabulary cards, 1,205 original media files and seven recovered Classroom originals join the existing Chinese 2 library. Search, multilingual reading, source-based practice, handwriting, optional browser video downloads and progress backups are integrated. Source gaps are explicitly listed. Fresh builds restore a checksum-pinned 1.28 GB media archive automatically; allow enough disk space for builds and native packages.
 
 ## ESC 1.2.4 visual repair
 

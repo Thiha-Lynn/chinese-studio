@@ -4,7 +4,7 @@ Captured 23 September 2026 from MFU MDL Chinese 1 and the authorized archived Cl
 
 ## Coverage
 
-- All 10 MDL lessons, their chapter menus, pre/post-test collections and linked story/activity graph: 1,249 records and 1,152 templates.
+- All 10 MDL lessons, 75 chapters, their menus, pre/post-test collections and linked story/activity graph: 1,249 records and 1,152 templates.
 - 182 vocabulary cards, with source spelling, pinyin, translations, artwork and recordings.
 - 582 activity question records. Multiple choice and sentence ordering use the supplied source keys; phonetic soundboards and collectible cards are ungraded. This is independent study, with no grade submission or MDL unlock-state synchronization.
 - 1,215 of 1,216 media references recovered, including 30 original videos. A final audit found a trailing-space audio path (recovered after trimming) and a mistyped `shuai.mpp3` path (source 404, explicitly recorded). Path aliases can refer to the same physical file. The media manifest records original URL, local filename, byte count and SHA-256.
@@ -15,6 +15,8 @@ Captured 23 September 2026 from MFU MDL Chinese 1 and the authorized archived Cl
 This is a study adaptation preserving the available course content. It does not duplicate the original game engine, animations, rewards, authentication or assessed submission services. Source translations and errors are preserved rather than silently corrected. Site/document instructions are archived as study data, never executed as agent or application instructions.
 
 ## Application changes
+
+The shared learning home lists all ten Chinese 1 lesson cards beside Chinese 2, with original island artwork, chapter/page counts and direct lesson links. A course chooser and primary navigation entry make Chinese 1 visible on desktop and mobile. Sentence activities accept every positively keyed source answer, and single-choice activities accept any one positively keyed choice.
 
 The `/course/1` route now contains lessons, multilingual source reading, search, original audio/video, vocabulary, practice, handwriting, resources and coverage. A `?page=CODE` link opens a particular source record. Chinese 1 word IDs and page/answer keys are namespaced within the existing progress schema, so existing backup and account synchronization mechanisms retain them. Chinese 2's learned-word total counts only Chinese 2 words.
 
@@ -44,4 +46,4 @@ Original university text, artwork, recordings, video and classroom resources ret
 
 ## Validation
 
-See the task's final verification report for the completed run. Automated checks cover graph references and explicit gaps, file sizes and manifest hashes, course separation in progress, source scoring, desktop/mobile reading and persistence, and offline audio range requests. Live MFU grading and cloud tutor inference are not exercised.
+See [release status and verification evidence](RELEASE_STATUS.md) for the completed deployment and platform checks. Automated checks cover graph references and explicit gaps, file sizes and manifest hashes, course separation in progress, source scoring, desktop/mobile reading and persistence, and offline audio range requests. Live MFU grading and cloud tutor inference are not exercised.

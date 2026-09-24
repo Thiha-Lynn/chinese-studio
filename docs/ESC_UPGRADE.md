@@ -42,7 +42,7 @@ Existing application IDs, Android key alias, Electron protocol/user-data directo
 
 ## Remaining platform limits
 
-No iOS IPA/App Store distribution or Play Store listing is configured. iPhone/iPad use the installable web app. Windows/macOS publisher certificates and Apple notarization are not configured. Hardware microphone/voice support and all historical OS versions require device-specific acceptance testing. Chinese 1 and missing original MDL media remain unavailable; this release preserves those honest coverage states.
+No iOS IPA/App Store distribution or Play Store listing is configured. iPhone/iPad use the installable web app. Windows/macOS publisher certificates and Apple notarization are not configured. Hardware microphone/voice support and all historical OS versions require device-specific acceptance testing. Chinese 1 was unavailable in this historical 1.2 release. Version 1.3 adds the recovered Chinese 1 archive; see [current coverage and source gaps](chinese1-archive.md).
 
 ## Upgrade safeguards
 
